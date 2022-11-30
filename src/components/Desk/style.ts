@@ -7,12 +7,13 @@ const Container = styled.div`
 const Desk = styled.main`
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: start;
 `
 
 const Title = styled.h1`
     color: #ffffff;
     text-align: center;
+    font-size: 48px;
 `
 const Styles = {
     Desk,

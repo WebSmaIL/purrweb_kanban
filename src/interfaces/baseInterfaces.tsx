@@ -2,7 +2,7 @@ export interface card {
     id: number
     name: string
     description: string
-    comments: []
+    comments: number[]
 }
 
 export interface column {
