@@ -1,10 +1,10 @@
 import React from "react";
 import Column from "./Column/Column";
-import { column } from "../../interfaces/baseInterfaces";
+import { IColumn } from "../../interfaces/baseInterfaces";
 import { Container, DeskWrapper, Title } from "./style";
 
 interface IProps {
-    columns: column[];
+    columns: IColumn[];
 }
 
 const Desk = ({ columns }: IProps): JSX.Element => {
@@ -12,7 +12,7 @@ const Desk = ({ columns }: IProps): JSX.Element => {
         <Container>
             <Title>Your Desk</Title>
             <DeskWrapper>
-                {columns.map((element: column): JSX.Element => {
+                {columns.map((element: IColumn): JSX.Element => {
                     return (
                         <Column
                             key={element.id}

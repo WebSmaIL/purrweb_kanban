@@ -1,12 +1,12 @@
-export interface card {
+export interface ICard {
     id: number
     name: string
     description: string
     comments: []
 }
 
-export interface column {
+export interface IColumn {
     id: number
     name: string
-    cards: card[]
+    cards: ICard[]
 }

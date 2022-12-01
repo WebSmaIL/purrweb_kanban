@@ -1,22 +1,44 @@
 import React from "react";
 import Desk from "./components/Desk/Desk";
-// import Footer from './components/Footer/Footer'
 import SideBar from "./components/Sidebar/Sidebar";
-import { columns } from "./template";
 import { Wrapper } from "./style";
+import { IColumn } from './interfaces/baseInterfaces'
+
+const columns: IColumn[] = [
+    {
+        id: 1,
+        name: 'TODO',
+        cards: []
+    },
+    {
+        id: 2,
+        name: 'In Progress',
+        cards: []
+    },
+    {
+        id: 3,
+        name: 'Testing',
+        cards: []
+    },
+    {
+        id: 4,
+        name: 'Done',
+        cards: []
+    }
+]
+
 
 const App = (): JSX.Element => {
-    let columnsInStorage = localStorage.getItem("columns");
-    if (!columnsInStorage) {
+    let columnsFromStorage = JSON.parse(String(localStorage.getItem("columns")));
+    if (!columnsFromStorage) {
         localStorage.setItem("columns", JSON.stringify(columns));
+        columnsFromStorage = columns;
     }
-
-    let columnsLocal = JSON.parse(String(localStorage.getItem("columns")));
 
     return (
         <Wrapper>
             <SideBar Name="Guest" />
-            <Desk columns={columnsLocal} />
+            <Desk columns={columnsFromStorage} />
             {/* <Footer /> */}
         </Wrapper>
     );
