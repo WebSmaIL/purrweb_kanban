@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Column = styled.div`
+export const ColumnWrapper = styled.div`
     padding: 10px 15px;
     background: #333333;
     border-radius: 10px;
@@ -17,7 +17,7 @@ const Column = styled.div`
     }
 `
 
-const RenameButton = styled.button`
+export const RenameButton = styled.button`
     display: block;
     width: 25px;
     height: 25px;
@@ -36,7 +36,7 @@ const RenameButton = styled.button`
     }
 `
 
-const Container = styled.div`
+export const Container = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,7 +45,7 @@ const Container = styled.div`
     margin-bottom: 10px;
 `
 
-const InputName = styled.input`
+export const InputName = styled.input`
     display: ${props => props.disabled ? 'none' : 'block'};
     width: 100%;
     padding: 5px 10px;
@@ -145,14 +145,14 @@ export const Title = styled.h2<{ disabled: boolean }>`
     margin: 0;
 `;
 
-const Styles = {
-    Column,
-    RenameButton,
-    Container,
-    InputName
-    // AddCardButton,
-    // AddCardInput,
-    // AcceptAddCardButton
-}
+// const Styles = {
+//     Column,
+//     RenameButton,
+//     Container,
+//     InputName
+//     // AddCardButton,
+//     // AddCardInput,
+//     // AcceptAddCardButton
+// }
 
-export default Styles
+// export default Styles

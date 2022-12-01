@@ -1,23 +1,30 @@
-import React from 'react'
-import Column from './Column/Column'
-import { column } from '../../interfaces/baseInterfaces'
-import Styles from './style'
+import React from "react";
+import Column from "./Column/Column";
+import { column } from "../../interfaces/baseInterfaces";
+import { Container, DeskWrapper, Title } from "./style";
 
 interface IProps {
-    columns: column[]
+    columns: column[];
 }
 
 const Desk = ({ columns }: IProps): JSX.Element => {
     return (
-        <Styles.Container>
-            <Styles.Title>Your Desk</Styles.Title>
-            <Styles.Desk>
+        <Container>
+            <Title>Your Desk</Title>
+            <DeskWrapper>
                 {columns.map((element: column): JSX.Element => {
-                    return <Column key={element.id} id={element.id} name={element.name} cards={element.cards} />
+                    return (
+                        <Column
+                            key={element.id}
+                            id={element.id}
+                            name={element.name}
+                            cards={element.cards}
+                        />
+                    );
                 })}
-            </Styles.Desk>
-        </Styles.Container>
-    )
-}
+            </DeskWrapper>
+        </Container>
+    );
+};
 
-export default Desk
+export default Desk;

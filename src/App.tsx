@@ -1,9 +1,9 @@
 import React from "react";
 import Desk from "./components/Desk/Desk";
 // import Footer from './components/Footer/Footer'
-import Header from "./components/Sidebar/Sidebar";
+import SideBar from "./components/Sidebar/Sidebar";
 import { columns } from "./template";
-import Style from "./style";
+import { Wrapper } from "./style";
 
 const App = (): JSX.Element => {
     let columnsInStorage = localStorage.getItem("columns");
@@ -14,11 +14,11 @@ const App = (): JSX.Element => {
     let columnsLocal = JSON.parse(String(localStorage.getItem("columns")));
 
     return (
-        <Style.Wrapper>
-            <Header Name="Guest" />
+        <Wrapper>
+            <SideBar Name="Guest" />
             <Desk columns={columnsLocal} />
             {/* <Footer /> */}
-        </Style.Wrapper>
+        </Wrapper>
     );
 };
 

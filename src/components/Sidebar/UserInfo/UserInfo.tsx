@@ -1,24 +1,25 @@
-import React from 'react'
-import icon from '../../../assets/user_icon.svg'
-import pen from '../../../assets/pen.svg'
-import Styles from './style'
+import React from "react";
+import {Icon, InfoContainer, NameContainer, RenameButton} from "./style";
+import assets from "../../../assets";
 
 interface IProps {
-    Name: string
+    Name: string;
 }
+
+const { userIcon, pen } = assets;
 
 const UserInfo = ({ Name }: IProps): JSX.Element => {
     return (
-        <Styles.InfoContainer>
-            <Styles.Icon src={icon} alt=""/>
-            <Styles.NameContainer>
-                <span>{ Name }</span>
-                <Styles.RenameButton>
-                    <img src={ pen } alt="" />
-                </Styles.RenameButton>
-            </Styles.NameContainer>
-        </Styles.InfoContainer>
-    )
-}
+        <InfoContainer>
+            <Icon src={userIcon} alt="" />
+            <NameContainer>
+                <span>{Name}</span>
+                <RenameButton>
+                    <img src={pen} alt="" />
+                </RenameButton>
+            </NameContainer>
+        </InfoContainer>
+    );
+};
 
-export default UserInfo
+export default UserInfo;

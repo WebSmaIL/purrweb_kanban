@@ -1,18 +1,18 @@
-import React from 'react'
-import Styles from './style'
-import UserInfo from './UserInfo/UserInfo'
+import React from "react";
+import { SidebarContainer } from "./style";
+import UserInfo from "./UserInfo/UserInfo";
 
 interface IProps {
-    Name: string
+    Name: string;
 }
 
 const Sidebar = ({ Name }: IProps): JSX.Element => {
     return (
-        <Styles.Sidebar>
+        <SidebarContainer>
             <span>KANBAN</span>
-            <UserInfo Name={Name}/>
-        </Styles.Sidebar>
-    )
-}
+            <UserInfo Name={Name} />
+        </SidebarContainer>
+    );
+};
 
-export default Sidebar
+export default Sidebar;

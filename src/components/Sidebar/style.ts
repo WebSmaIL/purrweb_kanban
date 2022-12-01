@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
-const Sidebar = styled.div`
+export const SidebarContainer = styled.div`
     display: grid;
     min-width: 200px;
     width: fit-content;
@@ -15,10 +15,4 @@ const Sidebar = styled.div`
     font-size: 26px;
     text-shadow: 0 0 10px #000000c0;
     text-align: center;
-`
-
-const Styles = {
-    Sidebar
-}
-
-export default Styles
+`;

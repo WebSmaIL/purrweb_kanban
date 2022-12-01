@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { card, column as IProps } from "../../../interfaces/baseInterfaces";
-import Styles, {
+import {
     AcceptAddCardButton,
     AddCardButton,
     AddCardInput,
-    Title
+    Title,
+    ColumnWrapper,
+    Container,
+    InputName,
+    RenameButton,
 } from "./style";
-import pen from "../../../assets/pen.svg";
-import plus from "../../../assets/plus.svg";
-import accept from "../../../assets/accept.svg";
+import assets from "../../../assets";
 import Card from "./Card/Card";
 
-
+const { pen, plus, accept } = assets;
 
 const Column = ({ id, name, cards }: IProps): JSX.Element => {
     const [cardsLocal, setCardsLocal] = useState(cards);
@@ -22,7 +24,7 @@ const Column = ({ id, name, cards }: IProps): JSX.Element => {
     const [addCardStatus, setAddCardStatus] = useState(false);
     const [newCardName, setNewCardName] = useState("");
 
-    const onClickRenameButton = () => {
+    const onRenameButton = () => {
         if (renameColumnMode) {
             let columnsLocal = JSON.parse(
                 String(localStorage.getItem("columns"))
@@ -35,34 +37,36 @@ const Column = ({ id, name, cards }: IProps): JSX.Element => {
 
     const onAddCard = () => {
         const newCard: card = {
-            id: cardsLocal.length ? cardsLocal[cardsLocal.length - 1].id + 1 : 1,
+            id: cardsLocal.length
+                ? cardsLocal[cardsLocal.length - 1].id + 1
+                : 1,
             name: newCardName,
-            description: '',
-            comments: []
-        }
-        setNewCardName('');
+            description: "",
+            comments: [],
+        };
+        setNewCardName("");
         setCardsLocal([...cardsLocal, newCard]);
         setAddCardStatus(!addCardStatus);
 
-        let columnsLocal = JSON.parse(String(localStorage.getItem('columns')));
+        let columnsLocal = JSON.parse(String(localStorage.getItem("columns")));
         columnsLocal[id - 1].cards = [...cardsLocal, newCard];
 
-        localStorage.setItem('columns', JSON.stringify(columnsLocal));
-    }
+        localStorage.setItem("columns", JSON.stringify(columnsLocal));
+    };
 
     return (
-        <Styles.Column>
-            <Styles.Container>
+        <ColumnWrapper>
+            <Container>
                 <Title disabled={renameColumnMode}>{localColumnName}</Title>
-                <Styles.InputName
+                <InputName
                     disabled={!renameColumnMode}
                     value={localColumnName}
                     onChange={(e) => setColumnName(e.target.value)}
                 />
-                <Styles.RenameButton onClick={onClickRenameButton}>
+                <RenameButton onClick={onRenameButton}>
                     <img src={renameColumnMode ? accept : pen} alt="" />
-                </Styles.RenameButton>
-            </Styles.Container>
+                </RenameButton>
+            </Container>
             {cardsLocal &&
                 cardsLocal.map(
                     (card): JSX.Element => (
@@ -94,7 +98,7 @@ const Column = ({ id, name, cards }: IProps): JSX.Element => {
                 <img src={plus} alt="" />
                 <span>Add Card</span>
             </AddCardButton>
-        </Styles.Column>
+        </ColumnWrapper>
     );
 };
 

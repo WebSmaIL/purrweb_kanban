@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const InfoContainer = styled.div`
+export const InfoContainer = styled.div`
     justify-self: center;
     width: fit-content;
     min-width: 150px;
@@ -23,20 +23,20 @@ const InfoContainer = styled.div`
     }
 `
 
-const Icon = styled.img`
+export const Icon = styled.img`
     width: 50px;
     height: 50px;
     margin: 0 auto 10px auto;
 `
 
-const NameContainer = styled.div`
+export const NameContainer = styled.div`
     margin: 0 auto;
     width: fit-content;
     text-align: center;
     position: relative;
 `
 
-const RenameButton = styled.button`
+export const RenameButton = styled.button`
     width: 25px;
     height: 25px;
 
@@ -61,12 +61,3 @@ const RenameButton = styled.button`
         transform: scale(1.1);
     }
 `
-
-const Styles = {
-    Icon,
-    InfoContainer,
-    NameContainer,
-    RenameButton
-}
-
-export default Styles
