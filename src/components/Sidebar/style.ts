@@ -4,7 +4,7 @@ const Sidebar = styled.div`
     display: grid;
     min-width: 200px;
     width: fit-content;
-    height: 91vh;
+    height: 100vh;
     padding: 40px 20px;
 
     background: #3d3d3dff;

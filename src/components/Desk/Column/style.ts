@@ -31,11 +31,6 @@ const RenameButton = styled.button`
 
     transition: all .3s ease;
 
-    /* & img {
-        width: 25px;
-        height: 25px;
-    } */
-
     &:hover {
         transform: scale(1.1);
     }
@@ -53,7 +48,6 @@ const Container = styled.div`
 const InputName = styled.input`
     display: ${props => props.disabled ? 'none' : 'block'};
     width: 100%;
-    height: 20px;
     padding: 5px 10px;
 
     border-radius: 5px;
@@ -68,13 +62,13 @@ const InputName = styled.input`
     }
 `
 
-const AddCardButton = styled.button`
+export const AddCardButton = styled.button<{addCardMode: boolean}>`
+    display: ${props => props.addCardMode ? 'none' : 'flex'};
     background: none;
     border: none;
     border-radius: 5px;
     outline: none;
 
-    display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -99,12 +93,66 @@ const AddCardButton = styled.button`
     }
 `
 
+export const AddCardInput = styled.input<{addCardMode: boolean}>`
+    display: ${props => props.addCardMode ? 'block' : 'none'};
+    width: 100%;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+
+    border-radius: 5px;
+    border: 1px solid #9b9b9b;
+    background: none;
+
+    color: #ffffff;
+    font-size: 16px;
+
+    &:focus {
+        outline: none;
+    }
+`
+
+export const AcceptAddCardButton = styled.button<{addCardMode: boolean}>`
+    display: ${props => props.addCardMode ? 'flex' : 'none'};
+    background: none;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+    font-weight: bold;
+    color: #9b9b9b;
+
+    transition: all .2s ease;
+
+    &:hover {
+        background: #525252;
+        color: #dbdbdb;
+    }
+`
+
+export const Title = styled.h2<{ disabled: boolean }>`
+    display: ${(props) => (props.disabled ? "none" : "inline")};
+    font-size: 18px;
+    font-weight: normal;
+    color: #ffffff;
+    margin: 0;
+`;
+
 const Styles = {
     Column,
     RenameButton,
     Container,
-    InputName,
-    AddCardButton
+    InputName
+    // AddCardButton,
+    // AddCardInput,
+    // AcceptAddCardButton
 }
 
 export default Styles

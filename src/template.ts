@@ -4,14 +4,7 @@ export const columns: column[] = [
     {
         id: 1,
         name: 'TODO',
-        cards: [
-            {
-                id: 1,
-                name: 'Закончить работу с колонками',
-                description: '',
-                comments: [1, 2, 3]
-            }
-        ]
+        cards: []
     },
     {
         id: 2,
