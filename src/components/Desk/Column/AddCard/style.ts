@@ -1,31 +1,13 @@
 import styled from "styled-components";
 
-export const AddCardInput = styled.input<{isVisible: boolean}>`
-    display: ${props => props.isVisible ? 'block' : 'none'};
-    width: 100%;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-
-    border-radius: 5px;
-    border: 1px solid #9b9b9b;
-    background: none;
-
-    color: #ffffff;
-    font-size: 16px;
-
-    &:focus {
-        outline: none;
-    }
-`
-
-export const AcceptAddCardButton = styled.button<{isVisible: boolean}>`
-    display: ${props => props.isVisible ? 'flex' : 'none'};
+export const AddCardButton = styled.button<{ addCardMode: boolean }>`
+    display: ${(props) => (props.addCardMode ? "none" : "flex")};
     background: none;
     border: none;
     border-radius: 5px;
     outline: none;
 
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 10px;
@@ -36,10 +18,15 @@ export const AcceptAddCardButton = styled.button<{isVisible: boolean}>`
     font-weight: bold;
     color: #9b9b9b;
 
-    transition: all .2s ease;
+    transition: all 0.2s ease;
+
+    & img {
+        width: 15px;
+        height: 15px;
+    }
 
     &:hover {
         background: #525252;
         color: #dbdbdb;
     }
-`
+`;
