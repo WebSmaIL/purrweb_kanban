@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const ColumnWrapper = styled.div`
     padding: 10px 15px;
@@ -10,18 +10,18 @@ export const ColumnWrapper = styled.div`
 
     text-align: center;
 
-    transition: all .3s ease;
+    transition: all 0.3s ease;
 
     &:hover {
         transform: scale(1.1);
     }
-`
+`;
 
 export const RenameButton = styled.button`
     display: block;
     width: 25px;
     height: 25px;
-    
+
     margin-left: 5px;
 
     background: none;
@@ -29,12 +29,31 @@ export const RenameButton = styled.button`
     outline: none;
     cursor: pointer;
 
-    transition: all .3s ease;
+    transition: all 0.3s ease;
 
     &:hover {
         transform: scale(1.1);
     }
-`
+`;
+
+export const AcceptButton = styled.button`
+    display: block;
+    width: 25px;
+    height: 25px;
+
+    margin-left: 5px;
+
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+`;
 
 export const Container = styled.div`
     display: flex;
@@ -43,10 +62,9 @@ export const Container = styled.div`
     padding-bottom: 10px;
     border-bottom: 1px solid #525252;
     margin-bottom: 10px;
-`
+`;
 
 export const InputName = styled.input`
-    display: ${props => props.disabled ? 'none' : 'block'};
     width: 100%;
     padding: 5px 10px;
 
@@ -60,10 +78,10 @@ export const InputName = styled.input`
     &:focus {
         outline: none;
     }
-`
+`;
 
-export const AddCardButton = styled.button<{addCardMode: boolean}>`
-    display: ${props => props.addCardMode ? 'none' : 'flex'};
+export const AddCardButton = styled.button<{ addCardMode: boolean }>`
+    display: ${(props) => (props.addCardMode ? "none" : "flex")};
     background: none;
     border: none;
     border-radius: 5px;
@@ -80,7 +98,7 @@ export const AddCardButton = styled.button<{addCardMode: boolean}>`
     font-weight: bold;
     color: #9b9b9b;
 
-    transition: all .2s ease;
+    transition: all 0.2s ease;
 
     & img {
         width: 15px;
@@ -91,7 +109,7 @@ export const AddCardButton = styled.button<{addCardMode: boolean}>`
         background: #525252;
         color: #dbdbdb;
     }
-`
+`;
 
 export const Title = styled.h2<{ disabled: boolean }>`
     display: ${(props) => (props.disabled ? "none" : "inline")};

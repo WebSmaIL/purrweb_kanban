@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ICard, IColumn as IProps } from "../../../interfaces/baseInterfaces";
 import {
     AddCardButton,
@@ -7,65 +7,73 @@ import {
     Container,
     InputName,
     RenameButton,
+    AcceptButton,
 } from "./style";
 import assets from "../../../assets";
 import Card from "./Card/Card";
 import AddCard from "./AddCard/AddCard";
+import { Context } from "../../../App";
 
 const { pen, plus, accept } = assets;
 
 const Column = ({ id, name, cards }: IProps): JSX.Element => {
-    const [cardsLocal, setCardsLocal] = useState(cards);
+    const contextColumns = useContext(Context);
+    const columns = [...contextColumns.columns];
+    const targetColumn = columns.find((column: { id: number }) => column.id === id)
 
-    const [isRenamed, setIsRenamed] = useState(false);
-    const [nameValue, setNameValue] = useState(name);
+    const [isRename, setIsRenamed] = useState(false);
+    const [titleValue, setTitleValue] = useState(name);
 
     const [isVisible, setIsVisible] = useState(false);
     const [newCardName, setNewCardName] = useState("");
 
-    const onRenameButton = () => {
-        if (isRenamed) {
-            let columnsLocal = JSON.parse(
-                String(localStorage.getItem("columns"))
-            );
-            columnsLocal[id - 1].name = nameValue;
-            localStorage.setItem("columns", JSON.stringify(columnsLocal));
+    const acceptRenamed = () => {
+        if (targetColumn) {
+            targetColumn.name = titleValue;
         }
-        setIsRenamed(!isRenamed);
+        contextColumns.setColumns(columns);
+
+        setIsRenamed(!isRename);
     };
 
-    const onAddCard = () => {
-        const newCard: ICard = {
+    const acceptAddCard = () => {
+        const card: ICard = {
             id: Number(Date.now()),
             name: newCardName,
             description: "",
             comments: [],
         };
+        if (targetColumn) {
+            targetColumn.cards.push(card);
+        }
+        contextColumns.setColumns(columns);
+
         setNewCardName("");
-        setCardsLocal([...cardsLocal, newCard]);
         setIsVisible(!isVisible);
-
-        let columnsLocal = JSON.parse(String(localStorage.getItem("columns")));
-        columnsLocal.find((column: { id: number }) => column.id === id).cards =
-            [...cardsLocal, newCard];
-
-        localStorage.setItem("columns", JSON.stringify(columnsLocal));
     };
 
     return (
         <ColumnWrapper>
-            <Container>
-                <Title disabled={isRenamed}>{nameValue}</Title>
-                <InputName
-                    disabled={!isRenamed}
-                    value={nameValue}
-                    onChange={(e) => setNameValue(e.target.value)}
-                />
-                <RenameButton onClick={onRenameButton}>
-                    <img src={isRenamed ? accept : pen} alt="" />
-                </RenameButton>
-            </Container>
-            {cardsLocal?.map(
+            {isRename ? (
+                <Container>
+                    <InputName
+                        value={titleValue}
+                        onChange={(e) => setTitleValue(e.target.value)}
+                    />
+                    <AcceptButton onClick={acceptRenamed}>
+                        <img src={accept} alt="" />
+                    </AcceptButton>
+                </Container>
+            ) : (
+                <Container>
+                    <Title disabled={isRename}>{titleValue}</Title>
+                    <RenameButton onClick={() => setIsRenamed(!isRename)}>
+                        <img src={pen} alt="" />
+                    </RenameButton>
+                </Container>
+            )}
+
+            {cards?.map(
                 (card): JSX.Element => (
                     <Card
                         key={card.id}
@@ -82,7 +90,7 @@ const Column = ({ id, name, cards }: IProps): JSX.Element => {
                     value={newCardName}
                     isVisible={isVisible}
                     setNewCardName={setNewCardName}
-                    onAddCard={onAddCard}
+                    onAddCard={acceptAddCard}
                 />
             ) : (
                 <AddCardButton
