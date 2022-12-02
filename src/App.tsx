@@ -1,24 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Desk from "./components/Desk/Desk";
-// import Footer from './components/Footer/Footer'
 import SideBar from "./components/Sidebar/Sidebar";
-import { columns } from "./template";
 import { Wrapper } from "./style";
+import { LocalStorageAPI } from "./api/LocalStorageAPI"; 
+import {ColumnsContext, ContextState} from './api/ContextAPI';
 
 const App = (): JSX.Element => {
-    let columnsInStorage = localStorage.getItem("columns");
-    if (!columnsInStorage) {
-        localStorage.setItem("columns", JSON.stringify(columns));
-    }
-
-    let columnsLocal = JSON.parse(String(localStorage.getItem("columns")));
+    const [columns, setColumns] = useState(ContextState);
+    useEffect(() => {
+        LocalStorageAPI.updateColumns(columns);
+    }, [columns])
 
     return (
-        <Wrapper>
-            <SideBar Name="Guest" />
-            <Desk columns={columnsLocal} />
-            {/* <Footer /> */}
-        </Wrapper>
+        <ColumnsContext.Provider value={{columns, setColumns}}>
+            <Wrapper>
+                <SideBar Name="Guest" />
+                <Desk columns={columns} />
+            </Wrapper>
+        </ColumnsContext.Provider>
     );
 };
 

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const CardContainer = styled.div`
+export const CardContainer = styled.div`
     display: block;
     width: 100%;
     min-height: 50px;
@@ -16,14 +16,14 @@ const CardContainer = styled.div`
     }
 `
 
-const CardTitle = styled.h2 `
+export const CardTitle = styled.h2 `
     font-size: 18px;
     color: #d1d1d1;
     margin: 0;
     word-wrap: break-word;
 `
 
-const TitleContainer = styled.div`
+export const TitleContainer = styled.div`
     text-align: left;
     padding: 10px;
     padding-right: 40px;
@@ -32,7 +32,7 @@ const TitleContainer = styled.div`
     box-sizing: border-box;
 `
 
-const ViewButton = styled.button`
+export const ViewButton = styled.button`
     background: none;
     border: none;
     outline: none;
@@ -58,7 +58,7 @@ const ViewButton = styled.button`
     }
 `
 
-const CommentContainer = styled.div`
+export const CommentContainer = styled.div`
     display: flex;
     align-items: center;
     width: fit-content;
@@ -70,13 +70,3 @@ const CommentContainer = styled.div`
         margin-right: 5px;
     }
 `
-
-const Styles = {
-    CardContainer,
-    CardTitle,
-    TitleContainer,
-    ViewButton,
-    CommentContainer
-}
-
-export default Styles
