@@ -6,7 +6,10 @@ export const ColumnWrapper = styled.div`
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 
+    overflow-y: auto;
+
     width: 200px;
+    max-height: 600px;
 
     text-align: center;
 

@@ -14,22 +14,15 @@ const App = (): JSX.Element => {
     const [name, setName] = useState(LocalStorageAPI.getName());
     useEffect(() => LocalStorageAPI.updateName(name), [name]);
 
-    const [viewedCard, setViewedCard] = useState({
-        cardID: 1,
-        columnID: 1,
-        comments: [{author:"ilya", content: "hellow world"}],
-        description: "just testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a longjust testing a long description just testing a long description just testing a long description just testing a long description",
-        name: 'testCard'
-    });
-
-    
+    const [viewedCard, setViewedCard] = useState(undefined);
 
     return (
-        <ColumnsContext.Provider value={{ columns, setColumns }}>
+        <ColumnsContext.Provider
+            value={{ columns, setColumns, setViewedCard, userName: name }}
+        >
             <Wrapper>
                 <SideBar Name={name} />
                 <Desk columns={columns} />
-
                 {name ? null : <LoginPopup setName={setName} />}
                 {viewedCard ? <CardPopup cardInfo={viewedCard} /> : null}
             </Wrapper>

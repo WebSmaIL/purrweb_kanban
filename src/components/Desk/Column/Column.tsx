@@ -23,9 +23,12 @@ const Column = ({ id, name, cards }: IProps): JSX.Element => {
                     <Card
                         key={card.id}
                         id={card.id}
+                        columnId={id}
                         name={card.name}
                         description={card.description}
                         comments={card.comments}
+                        author={card.author}
+                        columnName={name}
                     />
                 )
             )}

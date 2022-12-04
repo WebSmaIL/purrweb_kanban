@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
 const backdropAnim = keyframes`
     from {
@@ -7,7 +7,7 @@ const backdropAnim = keyframes`
     to {
         backdrop-filter: blur(10px);
     }
-`
+`;
 
 export const BackdropWrapper = styled.div`
     display: flex;
@@ -23,8 +23,8 @@ export const BackdropWrapper = styled.div`
     z-index: 1;
 
     background: #00000076;
-    animation: ${backdropAnim} .5s ease forwards;
-`
+    animation: ${backdropAnim} 0.5s ease forwards;
+`;
 
 const popupAnim = keyframes`
     from {
@@ -42,6 +42,8 @@ export const CardContainer = styled.div`
     justify-content: center;
     flex-direction: column;
 
+    max-width: 550px;
+
     padding: 20px 25px 20px 25px;
 
     background: #3d3d3dff;
@@ -49,29 +51,38 @@ export const CardContainer = styled.div`
     border-radius: 25px;
 
     animation: ${popupAnim} 0.3s linear;
-`
-
-export const Title = styled.h1`
-    display: inline-block;
-    margin-top: 0;
-    margin-bottom: 30px;
-
-    font-family: Arial, serif;
-    color: #ffffff;
 
     position: relative;
+`;
 
-    &::after {
-        content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 0;
+export const CloseButton = styled.button`
+    width: 30px;
 
-        display: block;
-        width: 100%;
-        height: 1px;
+    background: none;
+    border: none;
 
-        background: #505050ff;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+        outline: none;
+    }
+
+    & img {
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+        transform: scale(1.2);
+
+        & img {
+            transform: rotate(180deg);
+        }
     }
 `;
 
@@ -81,8 +92,26 @@ export const Subtitle = styled.h3`
     margin-bottom: 10px;
 
     font-family: Arial, serif;
-    font-weight: lighter;
     color: #ffffff;
+`;
+
+export const Author = styled(Subtitle)`
+    font-size: 16px;
+    font-weight: lighter;
+    position: relative;
+
+    margin-bottom: 30px;
+
+    &:after {
+        content: "";
+        background: #4d4d4d;
+        width: 100%;
+        height: 1px;
+
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+    }
 `
 
 export const DescriptionContainer = styled.div`
@@ -92,36 +121,38 @@ export const DescriptionContainer = styled.div`
     margin-bottom: 10px;
     width: 500px;
     max-height: 300px;
-    
+
     position: relative;
 
     color: #ffffff;
 
     background: #393939;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
-    transition: all .2s ease;
+    transition: all 0.2s ease;
 
     &:hover {
         background: #2f2f2f;
     }
-
-`
+`;
 
 export const Description = styled.p`
     display: inline-block;
     margin: 0;
     max-width: 500px;
-    max-height: 300px;
-    overflow: auto;
+    max-height: 150px;
+    overflow-y: auto;
 
+    word-wrap: break-word;
     font-family: Arial, serif;
     font-size: 16px;
     line-height: 1.25;
-    
-    &::-webkit-scrollbar { width: 0; }
-`
+
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+`;
 
 export const EditButton = styled.button`
     width: 25px;
@@ -146,9 +177,9 @@ export const EditButton = styled.button`
     &:hover {
         transform: scale(1.1);
     }
-`
+`;
 
-export const CommentsContainer = styled.div`
+export const CommentsWrapper = styled.div`
     display: flex;
     flex-direction: column;
     padding: 15px 25px;
@@ -163,9 +194,9 @@ export const CommentsContainer = styled.div`
 
     background: #393939;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
-    transition: all .2s ease;
+    transition: all 0.2s ease;
 
     &:hover {
         background: #2f2f2f;
@@ -174,115 +205,32 @@ export const CommentsContainer = styled.div`
     & span {
         margin-bottom: 20px;
     }
-`
+`;
 
-export const CommentInput = styled.textarea`
-    padding: 10px 5px;
-    resize: none;
-    background: none;
-    width: 100%;
+export const CommentsContainer = styled.div`
+    max-height: 150px;
+    overflow-y: auto;
+`;
+
+export const DeleteButton = styled.button`
+    margin: 20px auto 0 auto;
+    width: 150px;
     height: 50px;
 
+    background: #920101ff;
     border: none;
-
-    font-family: Arial, serif;
-    font-size: 16px;
-    color: #ffffff;
-
-    &:focus {
-        outline: none;
-    }
-
-    
-    &::-webkit-scrollbar { width: 0; }
-`
-
-export const NewCommentForm = styled.form`
-    display: flex;
-    align-items: center;
-
-    position: relative;
-
-    &::after {
-        content: "";
-        position: absolute;
-        top: -5px;
-        left: 0;
-
-        display: block;
-        width: 100%;
-        height: 1px;
-
-        background: #505050ff;
-    }
-`
-
-export const SendButton = styled.button`
-    background: none;
-    border: none;
-
-    width: 30px;
-    height: 30px;
-
-    transition: all .2s ease;
+    border-radius: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
     cursor: pointer;
 
-    & img {
-        width: 100%;
-        height: 100%;
-    }
-
-    &:hover {
-        transform: scale(1.1);
-    }
-
-`
-
-export const DescriptionForm = styled.form`
-    display: flex;
-    align-items: center;
-    width: 100%;
-`
-
-export const DescriptionInput = styled.textarea`
-    padding: 10px 5px;
-    resize: none;
-    background: none;
-    width: 100%;
-    height: 100px;
-
-    border: none;
-
-    font-family: Arial, serif;
-    font-size: 16px;
+    font-size: 18px;
     color: #ffffff;
 
-    &:focus {
-        outline: none;
-    }
-
-    
-    &::-webkit-scrollbar { width: 0; }
-`
-
-export const SubmitDescription = styled.button`
-    background: none;
-    border: none;
-
-    width: 30px;
-    height: 30px;
-
-    transition: all .2s ease;
-
-    cursor: pointer;
-
-    & img {
-        width: 100%;
-        height: 100%;
-    }
+    transition: all 0.3s ease;
 
     &:hover {
-        transform: scale(1.1);
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
-`
+`;

@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const AddCard = ({ findColumn, columnID }: IProps) => {
-    const contextColumns = useContext(ColumnsContext);
+    const context = useContext(ColumnsContext);
 
     const [isVisibleAddCard, setIsVisibleAddCard] = useState(false);
     const [newCardName, setNewCardName] = useState("");
@@ -21,16 +21,17 @@ const AddCard = ({ findColumn, columnID }: IProps) => {
         if (newCardName !== "") {
             const card: ICard = {
                 id: Number(Date.now()),
+                author: context.userName,
                 name: newCardName,
                 description: "",
                 comments: [],
             };
-            const columns = [...contextColumns.columns];
+            const columns = [...context.columns];
             const targetColumn = findColumn(columns, columnID);
             if (targetColumn) {
                 targetColumn.cards.push(card);
             }
-            contextColumns.setColumns(columns);
+            context.setColumns(columns);
             setNewCardName("");
         }
 

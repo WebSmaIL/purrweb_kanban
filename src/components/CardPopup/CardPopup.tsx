@@ -1,94 +1,126 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
     BackdropWrapper,
     CardContainer,
-    Title,
     DescriptionContainer,
     EditButton,
     Description,
-    CommentsContainer,
+    CommentsWrapper,
     Subtitle,
-    CommentInput,
-    NewCommentForm,
-    SendButton,
-    DescriptionForm,
-    DescriptionInput,
-    SubmitDescription,
+    DeleteButton,
+    CommentsContainer,
+    CloseButton,
+    Author,
 } from "./style";
 import assets from "../../assets/index";
 import Comment from "./Comment/Comment";
+import { IViewedCard, IColumn } from "../../interfaces/baseInterfaces";
+import EditDescription from "./EditDescription/EditDescription";
+import CreateComment from "./CreateComment/CreateComment";
+import { ColumnsContext } from "../../api/ContextAPI";
+import Title from "./Title/Title";
 
-const { pen, send } = assets;
+const { pen, close } = assets;
 
-interface IProps {
-    cardInfo: {
-        columnID: number;
-        cardID: number;
-        name: string;
-        description: string;
-        comments: {
-            author: string;
-            content: string;
-        }[];
+const CardPopup = ({ cardInfo }: IViewedCard) => {
+    const [isEditDescription, setIsEditDescription] = useState(false);
+    const context = useContext(ColumnsContext);
+
+    const findCard = (columns: IColumn[], columnId: number, cardId: number) => {
+        const targetColumn = columns.find(
+            (column: { id: number }) => column.id === columnId
+        );
+        if (targetColumn) {
+            return targetColumn.cards.find(
+                (card: { id: number }) => card.id === cardId
+            );
+        }
     };
-}
 
-const CardPopup = ({ cardInfo }: IProps) => {
-    const { cardID, columnID, comments, description, name } = cardInfo;
-
-    const [ isEditDescription, setIsEditDescription ] = useState(false);
+    const deleteCard = () => {
+        const columns = [...context.columns];
+        if (cardInfo) {
+            const targetColumn = columns.find(
+                (column: { id: number }) => column.id === cardInfo.columnId
+            );
+            if (targetColumn) {
+                const filtredColumn = targetColumn.cards.filter(
+                    (card) => card.id !== cardInfo.cardId
+                );
+                targetColumn.cards = filtredColumn;
+                context.setViewedCard(undefined);
+                context.setColumns(columns);
+            }
+        }
+    };
 
     return (
         <BackdropWrapper>
-            <CardContainer>
-                <Title>
-                    Current card - <i>{name}</i>
-                </Title>
-                <Subtitle>
-                    <i>Description</i>
-                </Subtitle>
-                <DescriptionContainer>
-                    {isEditDescription ? (
-                        <DescriptionForm>
-                            <DescriptionInput placeholder="Enter a new description" />
-                            <SubmitDescription><img src={send} alt="" /></SubmitDescription>
-                        </DescriptionForm>
-                    ) : (
-                        <>
-                            <Description>
-                                {description
-                                    ? description
-                                    : "This card don`t have description"}
-                            </Description>
-                            <EditButton onClick={()=> setIsEditDescription(true)}>
-                                <img src={pen} alt="" />
-                            </EditButton>
-                        </>
-                    )}
-                </DescriptionContainer>
-                <Subtitle>
-                    <i>Comments</i>
-                </Subtitle>
-                <CommentsContainer>
-                    {comments.length > 0 ? (
-                        comments.map((comment) => (
-                            <Comment
-                                author={comment.author}
-                                content={comment.content}
+            {cardInfo && (
+                <CardContainer>
+                    <CloseButton
+                        onClick={() => context.setViewedCard(undefined)}
+                    >
+                        <img src={close} alt="" />
+                    </CloseButton>
+                    <Title cardInfo={cardInfo} findCard={findCard} />
+                    <Subtitle>
+                        Column - {cardInfo.columnName}
+                    </Subtitle>
+                    <Author>
+                        Author - <i>{cardInfo.author}</i>
+                    </Author>
+                    <Subtitle>
+                        <i>Description</i>
+                    </Subtitle>
+                    <DescriptionContainer>
+                        {isEditDescription ? (
+                            <EditDescription
+                                cardInfo={cardInfo}
+                                findCard={findCard}
+                                setIsEditDescription={setIsEditDescription}
                             />
-                        ))
-                    ) : (
-                        <span>This card don`t have comments</span>
-                    )}
-
-                    <NewCommentForm>
-                        <CommentInput placeholder="Enter comment text..."></CommentInput>
-                        <SendButton>
-                            <img src={send} alt="" />
-                        </SendButton>
-                    </NewCommentForm>
-                </CommentsContainer>
-            </CardContainer>
+                        ) : (
+                            <>
+                                <Description>
+                                    {cardInfo.description
+                                        ? cardInfo.description
+                                        : "This card don`t have description"}
+                                </Description>
+                                <EditButton
+                                    onClick={() => setIsEditDescription(true)}
+                                >
+                                    <img src={pen} alt="" />
+                                </EditButton>
+                            </>
+                        )}
+                    </DescriptionContainer>
+                    <Subtitle>
+                        <i>Comments</i>
+                    </Subtitle>
+                    <CommentsWrapper>
+                        <CommentsContainer>
+                            {cardInfo.comments?.map((comment) => (
+                                <Comment
+                                    cardInfo={cardInfo}
+                                    findCard={findCard}
+                                    key={comment.id}
+                                    id={comment.id}
+                                    author={comment.author}
+                                    content={comment.content}
+                                />
+                            ))}
+                        </CommentsContainer>
+                        <CreateComment
+                            cardInfo={cardInfo}
+                            findCard={findCard}
+                        />
+                    </CommentsWrapper>
+                    <DeleteButton onClick={deleteCard}>
+                        Delete card
+                    </DeleteButton>
+                </CardContainer>
+            )}
         </BackdropWrapper>
     );
 };

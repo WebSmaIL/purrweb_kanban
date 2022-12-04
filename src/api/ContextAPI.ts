@@ -29,11 +29,15 @@ const defaultColumns = [
 export const ContextState = columnsFromStorage || defaultColumns;
 
 type ContextType = {
-    columns: IColumn[]
-    setColumns: React.Dispatch<any>
-}
+    columns: IColumn[];
+    userName: string;
+    setColumns: React.Dispatch<any>;
+    setViewedCard: React.Dispatch<any>;
+};
 
-export const ColumnsContext = createContext<ContextType>({ 
+export const ColumnsContext = createContext<ContextType>({
     columns: [...ContextState],
-    setColumns: ()=>{}
+    userName: "",
+    setColumns: () => {},
+    setViewedCard: () => {},
 });

@@ -5,6 +5,8 @@ import plus from "./plus.svg";
 import userIcon from "./user_icon.svg";
 import view from "./view.svg";
 import send from "./send.svg";
+import close from "./close.svg";
+import del from './delete.svg'
 
 const assets = {
     accept,
@@ -13,7 +15,9 @@ const assets = {
     plus,
     userIcon,
     view,
-    send
+    send,
+    close,
+    del
 };
 
 export default assets;
