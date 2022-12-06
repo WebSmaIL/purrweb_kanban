@@ -12,63 +12,60 @@ import {
     CloseButton,
     Author,
 } from "./style";
-import assets from "../../assets/index";
+import { pen, close } from "../../assets/index";
 import Comment from "./Comment/Comment";
-import { IViewedCard, IColumn } from "../../interfaces/baseInterfaces";
+import { ICardInfo } from "../../interfaces/baseInterfaces";
 import EditDescription from "./EditDescription/EditDescription";
 import CreateComment from "./CreateComment/CreateComment";
-import { ColumnsContext } from "../../api/ContextAPI";
+import { StateContext } from "../../api/ContextAPI";
 import Title from "./Title/Title";
+import { cloneDeep } from "lodash";
+import { replaceColumn } from "../../helpers/helpers";
 
-const { pen, close } = assets;
-
-const CardPopup = ({ cardInfo }: IViewedCard) => {
+const CardPopup = ({ cardId, columnId }: ICardInfo) => {
     const [isEditDescription, setIsEditDescription] = useState(false);
-    const context = useContext(ColumnsContext);
+    const context = useContext(StateContext);
 
-    const findCard = (columns: IColumn[], columnId: number, cardId: number) => {
-        const targetColumn = columns.find(
-            (column: { id: number }) => column.id === columnId
-        );
-        if (targetColumn) {
-            return targetColumn.cards.find(
-                (card: { id: number }) => card.id === cardId
-            );
-        }
-    };
+    const currentColumn = context.columns.find(
+        (column: { id: number }) => column.id === columnId
+    );
+
+    const currentCard = currentColumn?.cards.find(
+        (card: { id: number }) => card.id === cardId
+    );
 
     const deleteCard = () => {
-        const columns = [...context.columns];
-        if (cardInfo) {
-            const targetColumn = columns.find(
-                (column: { id: number }) => column.id === cardInfo.columnId
+        const columnCopy = cloneDeep(currentColumn);
+        if (columnCopy) {
+            columnCopy.cards = columnCopy.cards.filter(
+                (card) => card.id !== cardId
             );
-            if (targetColumn) {
-                const filtredColumn = targetColumn.cards.filter(
-                    (card) => card.id !== cardInfo.cardId
-                );
-                targetColumn.cards = filtredColumn;
-                context.setViewedCard(undefined);
-                context.setColumns(columns);
-            }
+            const updatedColumns = replaceColumn(
+                context.columns,
+                columnId,
+                columnCopy
+            );
+            context.setViewedCard(undefined);
+            context.setColumns(updatedColumns);
         }
     };
 
     return (
         <BackdropWrapper>
-            {cardInfo && (
+            {currentColumn && currentCard && (
                 <CardContainer>
                     <CloseButton
                         onClick={() => context.setViewedCard(undefined)}
                     >
                         <img src={close} alt="" />
                     </CloseButton>
-                    <Title cardInfo={cardInfo} findCard={findCard} />
-                    <Subtitle>
-                        Column - {cardInfo.columnName}
-                    </Subtitle>
+                    <Title
+                        currentCard={currentCard}
+                        cardInfo={{ cardId, columnId }}
+                    />
+                    <Subtitle>Column - {currentColumn.name}</Subtitle>
                     <Author>
-                        Author - <i>{cardInfo.author}</i>
+                        Author - <i>{currentCard.author}</i>
                     </Author>
                     <Subtitle>
                         <i>Description</i>
@@ -76,15 +73,15 @@ const CardPopup = ({ cardInfo }: IViewedCard) => {
                     <DescriptionContainer>
                         {isEditDescription ? (
                             <EditDescription
-                                cardInfo={cardInfo}
-                                findCard={findCard}
+                                currentCard={currentCard}
+                                cardInfo={{ cardId, columnId }}
                                 setIsEditDescription={setIsEditDescription}
                             />
                         ) : (
                             <>
                                 <Description>
-                                    {cardInfo.description
-                                        ? cardInfo.description
+                                    {currentCard.description
+                                        ? currentCard.description
                                         : "This card don`t have description"}
                                 </Description>
                                 <EditButton
@@ -100,10 +97,10 @@ const CardPopup = ({ cardInfo }: IViewedCard) => {
                     </Subtitle>
                     <CommentsWrapper>
                         <CommentsContainer>
-                            {cardInfo.comments?.map((comment) => (
+                            {currentCard.comments?.map((comment) => (
                                 <Comment
-                                    cardInfo={cardInfo}
-                                    findCard={findCard}
+                                    currentCard={currentCard}
+                                    cardInfo={{ cardId, columnId }}
                                     key={comment.id}
                                     id={comment.id}
                                     author={comment.author}
@@ -112,8 +109,8 @@ const CardPopup = ({ cardInfo }: IViewedCard) => {
                             ))}
                         </CommentsContainer>
                         <CreateComment
-                            cardInfo={cardInfo}
-                            findCard={findCard}
+                            currentCard={currentCard}
+                            cardInfo={{ cardId, columnId }}
                         />
                     </CommentsWrapper>
                     <DeleteButton onClick={deleteCard}>

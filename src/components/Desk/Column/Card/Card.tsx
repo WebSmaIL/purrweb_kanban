@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { ICard } from "../../../../interfaces/baseInterfaces";
+import { IComment } from "../../../../interfaces/baseInterfaces";
 import view from "../../../../assets/view.svg";
-import comment from "../../../../assets/comment.svg";
+import { comment } from "../../../../assets";
 import {
     CardContainer,
     CardTitle,
@@ -9,21 +9,23 @@ import {
     TitleContainer,
     ViewButton,
 } from "./style";
-import { ColumnsContext } from "../../../../api/ContextAPI";
+import { StateContext } from "../../../../api/ContextAPI";
 
-interface IProps extends ICard {
+interface IProps {
     columnId: number;
-    columnName: string;
+    id: number;
+    name: string;
+    comments: IComment[]
 }
 
-const Card = ({ id, columnId, name, description, comments, author, columnName }: IProps) => {
-    const context = useContext(ColumnsContext);
+const Card = ({ id, columnId, name, comments }: IProps) => {
+    const context = useContext(StateContext);
 
     return (
         <CardContainer>
             <TitleContainer>
                 <CardTitle>{name}</CardTitle>
-                <ViewButton onClick={()=> context.setViewedCard({cardId: id, columnName, author, columnId, name, description, comments})}>
+                <ViewButton onClick={()=> context.setViewedCard({cardId: id, columnId})}>
                     <img src={view} alt="" />
                 </ViewButton>
             </TitleContainer>

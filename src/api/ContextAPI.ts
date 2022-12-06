@@ -35,7 +35,7 @@ type ContextType = {
     setViewedCard: React.Dispatch<any>;
 };
 
-export const ColumnsContext = createContext<ContextType>({
+export const StateContext = createContext<ContextType>({
     columns: [...ContextState],
     userName: "",
     setColumns: () => {},

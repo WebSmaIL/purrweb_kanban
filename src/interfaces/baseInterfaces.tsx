@@ -3,11 +3,7 @@ export interface ICard {
     name: string;
     author: string;
     description: string;
-    comments: {
-        id: number;
-        author: string;
-        content: string;
-    }[];
+    comments: IComment[];
 }
 
 export interface IColumn {
@@ -16,22 +12,13 @@ export interface IColumn {
     cards: ICard[];
 }
 
-export interface ICardInfo {
-    columnId: number;
-    columnName: string;
-    cardId: number;
-    name: string;
+export interface IComment {
+    id: number;
     author: string;
-    description: string;
-    comments:
-        | {
-              id: number;
-              author: string;
-              content: string;
-          }[]
-        | [];
+    content: string;
 }
 
-export interface IViewedCard {
-    cardInfo?: ICardInfo;
+export interface ICardInfo {
+    columnId: number;
+    cardId: number;
 }

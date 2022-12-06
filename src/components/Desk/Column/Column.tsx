@@ -1,22 +1,14 @@
 import React from "react";
-import { IColumn, IColumn as IProps } from "../../../interfaces/baseInterfaces";
+import { IColumn } from "../../../interfaces/baseInterfaces";
 import { ColumnWrapper } from "./style";
 import Card from "./Card/Card";
 import ColumnTitle from "./ColumnTitle/ColumnTitle";
 import AddCard from "./AddCard/AddCard";
 
-const Column = ({ id, name, cards }: IProps): JSX.Element => {
-    const findColumn = (columns: IColumn[], id: number) => {
-        return columns.find((column: { id: number }) => column.id === id);
-    };
-
+const Column = ({ id, name, cards }: IColumn): JSX.Element => {
     return (
         <ColumnWrapper>
-            <ColumnTitle
-                findColumn={findColumn}
-                columnID={id}
-                columnName={name}
-            />
+            <ColumnTitle id={id} name={name} cards={cards} />
 
             {cards?.map(
                 (card): JSX.Element => (
@@ -25,15 +17,12 @@ const Column = ({ id, name, cards }: IProps): JSX.Element => {
                         id={card.id}
                         columnId={id}
                         name={card.name}
-                        description={card.description}
                         comments={card.comments}
-                        author={card.author}
-                        columnName={name}
                     />
                 )
             )}
 
-            <AddCard findColumn={findColumn} columnID={id} />
+            <AddCard id={id} name={name} cards={cards} />
         </ColumnWrapper>
     );
 };

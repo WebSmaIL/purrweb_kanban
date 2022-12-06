@@ -1,46 +1,32 @@
 import React, { useContext, useState } from "react";
 import { CommentInput, NewCommentForm, SendButton } from "./style";
-import assets from "../../../assets";
-import { ICard, ICardInfo, IColumn } from "../../../interfaces/baseInterfaces";
-import { ColumnsContext } from "../../../api/ContextAPI";
-
-const { send } = assets;
+import { send } from "../../../assets";
+import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
+import { StateContext } from "../../../api/ContextAPI";
+import { replaceCard } from "../../../helpers/helpers";
+import { cloneDeep } from "lodash";
 
 interface IProps {
     cardInfo: ICardInfo;
-    findCard: (
-        columns: IColumn[],
-        columnId: number,
-        cardId: number
-    ) => ICard | undefined;
+    currentCard: ICard;
 }
 
-const CreateComment = ({ cardInfo, findCard }: IProps) => {
+const CreateComment = ({ cardInfo, currentCard }: IProps) => {
     const [commentText, setCommentText] = useState("");
-    const context = useContext(ColumnsContext);
+    const context = useContext(StateContext);
 
-    const updateComments = (author: string, content: string) => {
+    const addComment = (author: string, content: string) => {
         const comment = {
             id: Date.now(),
             author,
             content,
         };
+        const cardCopy = cloneDeep(currentCard);
+        cardCopy.comments.push(comment);
 
-        const columns = [...context.columns];
-        const targetCard = findCard(
-            columns,
-            cardInfo.columnId,
-            cardInfo.cardId
-        );
-        if (targetCard) {
-            targetCard.comments.push(comment);
-            context.setViewedCard({
-                ...cardInfo,
-                comments: targetCard.comments,
-            });
-            context.setColumns(columns);
-            setCommentText("");
-        }
+        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
+        context.setColumns(updatedColumns);
+        setCommentText("");
     };
 
     return (
@@ -53,7 +39,7 @@ const CreateComment = ({ cardInfo, findCard }: IProps) => {
             <SendButton
                 onClick={(e) => {
                     e.preventDefault();
-                    updateComments(context.userName, commentText);
+                    addComment(context.userName, commentText);
                 }}
             >
                 <img src={send} alt="" />

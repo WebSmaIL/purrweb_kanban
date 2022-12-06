@@ -7,69 +7,47 @@ import {
     ChangeButton,
     InputComment,
 } from "./style";
-import assets from "../../../assets";
-import { ICardInfo, IColumn, ICard } from "../../../interfaces/baseInterfaces";
-import { ColumnsContext } from "../../../api/ContextAPI";
+import { pen, del } from "../../../assets";
+import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
+import { StateContext } from "../../../api/ContextAPI";
+import { replaceCard } from "../../../helpers/helpers";
+import { cloneDeep } from "lodash";
 
 interface IProps {
     cardInfo: ICardInfo;
-    findCard: (
-        columns: IColumn[],
-        columnId: number,
-        cardId: number
-    ) => ICard | undefined;
+    currentCard: ICard;
     id: number;
     author: string;
     content: string;
 }
 
-const Comment = ({ id, author, content, cardInfo, findCard }: IProps) => {
-    const context = useContext(ColumnsContext);
+const Comment = ({ id, author, content, cardInfo, currentCard }: IProps) => {
+    const context = useContext(StateContext);
 
     const [commentText, setCommentText] = useState(content);
     const [isEdit, setIsEdit] = useState(false);
 
     const deleteComment = () => {
-        const columns = [...context.columns];
-        const targetCard = findCard(
-            columns,
-            cardInfo.columnId,
-            cardInfo.cardId
+        const cardCopy = cloneDeep(currentCard);
+        cardCopy.comments = cardCopy.comments.filter(
+            (comment) => comment.id !== id
         );
-        if (targetCard) {
-            targetCard.comments = targetCard.comments.filter(
-                (comment) => comment.id !== id
-            );
-            context.setViewedCard({
-                ...cardInfo,
-                comments: targetCard.comments,
-            });
-            context.setColumns(columns);
-        }
+
+        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
+        context.setColumns(updatedColumns);
     };
 
     const updateComment = () => {
-        const columns = [...context.columns];
-        if (cardInfo) {
-            const targetCard = findCard(
-                columns,
-                cardInfo.columnId,
-                cardInfo.cardId
-            );
-            if (targetCard) {
-                const targetComment = targetCard.comments.find(
-                    (comment) => comment.id === id
-                );
-                if (targetComment) {
-                    targetComment.content = commentText;
-                    context.setViewedCard({
-                        ...cardInfo,
-                        comments: targetCard.comments,
-                    });
-                    context.setColumns(columns);
-                }
-            }
-        }
+        const cardCopy = cloneDeep(currentCard);
+        const updatedComments = cardCopy.comments.map((comment) =>
+            comment.id === id
+                ? { id, author: comment.author, content: commentText }
+                : comment
+        );
+        cardCopy.comments = updatedComments;
+
+        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
+        context.setColumns(updatedColumns);
         setIsEdit(!isEdit);
     };
 
@@ -94,10 +72,10 @@ const Comment = ({ id, author, content, cardInfo, findCard }: IProps) => {
                             setIsEdit(!isEdit);
                         }}
                     >
-                        <img src={assets.pen} alt="" />
+                        <img src={pen} alt="" />
                     </ChangeButton>
                     <DeleteButton onClick={deleteComment}>
-                        <img src={assets.del} alt="" />
+                        <img src={del} alt="" />
                     </DeleteButton>
                 </>
             )}

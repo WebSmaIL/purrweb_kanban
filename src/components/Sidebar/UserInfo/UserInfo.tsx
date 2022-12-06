@@ -1,12 +1,10 @@
 import React from "react";
 import { Icon, InfoContainer, NameContainer } from "./style";
-import assets from "../../../assets";
+import { userIcon } from "../../../assets";
 
 interface IProps {
     Name: string;
 }
-
-const { userIcon } = assets;
 
 const UserInfo = ({ Name }: IProps): JSX.Element => {
     return (

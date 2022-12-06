@@ -3,9 +3,10 @@ import Desk from "./components/Desk/Desk";
 import SideBar from "./components/Sidebar/Sidebar";
 import { Wrapper } from "./style";
 import { LocalStorageAPI } from "./api/LocalStorageAPI";
-import { ColumnsContext, ContextState } from "./api/ContextAPI";
+import { StateContext, ContextState } from "./api/ContextAPI";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
 import CardPopup from "./components/CardPopup/CardPopup";
+import { ICardInfo } from "./interfaces/baseInterfaces";
 
 const App = (): JSX.Element => {
     const [columns, setColumns] = useState(ContextState);
@@ -14,19 +15,19 @@ const App = (): JSX.Element => {
     const [name, setName] = useState(LocalStorageAPI.getName());
     useEffect(() => LocalStorageAPI.updateName(name), [name]);
 
-    const [viewedCard, setViewedCard] = useState(undefined);
+    const [viewedCard, setViewedCard] = useState<ICardInfo | undefined>(undefined);
 
     return (
-        <ColumnsContext.Provider
+        <StateContext.Provider
             value={{ columns, setColumns, setViewedCard, userName: name }}
         >
             <Wrapper>
                 <SideBar Name={name} />
                 <Desk columns={columns} />
-                {name ? null : <LoginPopup setName={setName} />}
-                {viewedCard ? <CardPopup cardInfo={viewedCard} /> : null}
+                {!name && <LoginPopup setName={setName} />}
+                {viewedCard && <CardPopup columnId={viewedCard.columnId} cardId={viewedCard.cardId} />}
             </Wrapper>
-        </ColumnsContext.Provider>
+        </StateContext.Provider>
     );
 };
 

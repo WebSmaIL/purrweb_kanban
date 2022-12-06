@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
-import assets from "../../../../assets";
-import { ColumnsContext } from "../../../../api/ContextAPI";
-import { IColumn } from "../../../../interfaces/baseInterfaces";
+import { accept, pen } from "../../../../assets";
+import { StateContext } from "../../../../api/ContextAPI";
 import {
     Container,
     InputName,
@@ -9,28 +8,19 @@ import {
     Title,
     AcceptButton,
 } from "./style";
+import { replaceColumn } from "../../../../helpers/helpers";
+import { IColumn } from "../../../../interfaces/baseInterfaces";
 
-interface IProps {
-    findColumn: (columns: IColumn[], id: number) => IColumn | undefined;
-    columnID: number;
-    columnName: string;
-}
-
-const { accept, pen } = assets;
-
-const ColumnTitle = ({ findColumn, columnID, columnName }: IProps) => {
-    const contextColumns = useContext(ColumnsContext);
-    const columns = [...contextColumns.columns];
+const ColumnTitle = ({ id, name, cards }: IColumn) => {
+    const context = useContext(StateContext);
 
     const [isRenameColumn, setIsRenameColumn] = useState(false);
-    const [titleValue, setTitleValue] = useState(columnName);
+    const [titleValue, setTitleValue] = useState(name);
 
     const renameColumn = () => {
-        const targetColumn = findColumn(columns, columnID);
-        if (targetColumn && targetColumn.name !== titleValue) {
-            targetColumn.name = titleValue;
-            contextColumns.setColumns(columns);
-        }
+        const column = { id, name: titleValue, cards };
+        const updatedColumns = replaceColumn(context.columns, id, column);
+        context.setColumns(updatedColumns);
         setIsRenameColumn(!isRenameColumn);
     };
 
