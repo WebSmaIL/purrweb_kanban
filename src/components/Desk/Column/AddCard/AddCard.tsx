@@ -1,61 +1,47 @@
 import React, { useContext, useState } from "react";
 import AddCardForm from "./AddCardForm/AddCardForm";
-import { ColumnsContext } from "../../../../api/ContextAPI";
+import { StateContext } from "../../../../api/ContextAPI";
 import { ICard, IColumn } from "../../../../interfaces/baseInterfaces";
 import { AddCardButton } from "./style";
-import assets from "../../../../assets";
+import { plus } from "../../../../assets";
+import { replaceColumn } from "../../../../helpers/helpers";
 
-const { plus } = assets;
-interface IProps {
-    findColumn: (columns: IColumn[], id: number) => IColumn | undefined;
-    columnID: number;
-}
+const AddCard = ({ id, name, cards }: IColumn) => {
+    const context = useContext(StateContext);
 
-const AddCard = ({ findColumn, columnID }: IProps) => {
-    const contextColumns = useContext(ColumnsContext);
-
-    const [isVisibleAddCard, setIsVisibleAddCard] = useState(false);
-    const [newCardName, setNewCardName] = useState("");
+    const [isEdit, setIsEdit] = useState(false);
+    const [cardText, setNewCardName] = useState("");
 
     const addCard = () => {
-        if (newCardName !== "") {
+        if (cardText !== "") {
             const card: ICard = {
                 id: Number(Date.now()),
-                name: newCardName,
+                author: context.userName,
+                name: cardText,
                 description: "",
                 comments: [],
             };
-            const columns = [...contextColumns.columns];
-            const targetColumn = findColumn(columns, columnID);
-            if (targetColumn) {
-                targetColumn.cards.push(card);
-            }
-            contextColumns.setColumns(columns);
+            const column = { id, name, cards: [...cards, card] };
+            const updatedColumns = replaceColumn(context.columns, id, column);
+            context.setColumns(updatedColumns);
+
             setNewCardName("");
         }
-
-        setIsVisibleAddCard(!isVisibleAddCard);
+        setIsEdit(!isEdit);
     };
 
-    return (
-        <>
-            {isVisibleAddCard ? (
-                <AddCardForm
-                    value={newCardName}
-                    isVisible={isVisibleAddCard}
-                    setNewCardName={setNewCardName}
-                    onAddCard={addCard}
-                />
-            ) : (
-                <AddCardButton
-                    onClick={() => setIsVisibleAddCard(!isVisibleAddCard)}
-                    addCardMode={isVisibleAddCard}
-                >
-                    <img src={plus} alt="" />
-                    <span>Add Card</span>
-                </AddCardButton>
-            )}
-        </>
+    return isEdit ? (
+        <AddCardForm
+            value={cardText}
+            isVisible={isEdit}
+            setNewCardName={setNewCardName}
+            onAddCard={addCard}
+        />
+    ) : (
+        <AddCardButton onClick={() => setIsEdit(!isEdit)} addCardMode={isEdit}>
+            <img src={plus} alt="" />
+            <span>Add Card</span>
+        </AddCardButton>
     );
 };
 

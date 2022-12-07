@@ -1,12 +1,10 @@
 import React from "react";
-import {Icon, InfoContainer, NameContainer, RenameButton} from "./style";
-import assets from "../../../assets";
+import { Icon, InfoContainer, NameContainer } from "./style";
+import { userIcon } from "../../../assets";
 
 interface IProps {
     Name: string;
 }
-
-const { userIcon, pen } = assets;
 
 const UserInfo = ({ Name }: IProps): JSX.Element => {
     return (
@@ -14,9 +12,6 @@ const UserInfo = ({ Name }: IProps): JSX.Element => {
             <Icon src={userIcon} alt="" />
             <NameContainer>
                 <span>{Name}</span>
-                <RenameButton>
-                    <img src={pen} alt="" />
-                </RenameButton>
             </NameContainer>
         </InfoContainer>
     );

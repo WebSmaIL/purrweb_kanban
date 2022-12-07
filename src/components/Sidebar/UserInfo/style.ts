@@ -26,7 +26,7 @@ export const InfoContainer = styled.div`
 export const Icon = styled.img`
     width: 50px;
     height: 50px;
-    margin: 0 auto 10px auto;
+    margin: 0 auto;
 `
 
 export const NameContainer = styled.div`
@@ -34,30 +34,4 @@ export const NameContainer = styled.div`
     width: fit-content;
     text-align: center;
     position: relative;
-`
-
-export const RenameButton = styled.button`
-    width: 25px;
-    height: 25px;
-
-    background: none;
-    border: none;
-    outline: none;
-
-    position: absolute;
-    top: 50%;
-    margin-top: -12.5px;
-    right: -30px;
-    cursor: pointer;
-
-    transition: all 0.3s ease;
-
-    & img {
-        width: 100%;
-        height: 100%;
-    }
-
-    &:hover {
-        transform: scale(1.1);
-    }
 `
