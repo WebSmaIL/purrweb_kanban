@@ -1,24 +1,31 @@
 import React, { useContext, useState } from "react";
-import { accept, pen } from "../../../../assets";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { StateContext } from "../../../../api/ContextAPI";
+import { accept, pen } from "../../../../assets";
 import {
     Container,
     InputName,
     RenameButton,
     Title,
     AcceptButton,
+    ChangeTitleForm,
 } from "./style";
 import { replaceColumn } from "../../../../helpers/helpers";
 import { IColumn } from "../../../../interfaces/baseInterfaces";
+
+interface IShippingField {
+    columnTitle: string;
+}
 
 const ColumnTitle = ({ id, name, cards }: IColumn) => {
     const context = useContext(StateContext);
 
     const [isRenameColumn, setIsRenameColumn] = useState(false);
-    const [titleValue, setTitleValue] = useState(name);
 
-    const renameColumn = () => {
-        const column = { id, name: titleValue, cards };
+    const { register, handleSubmit } = useForm<IShippingField>();
+
+    const onSubmit: SubmitHandler<IShippingField> = ({ columnTitle }) => {
+        const column = { id, name: columnTitle, cards };
         const updatedColumns = replaceColumn(context.columns, id, column);
         context.setColumns(updatedColumns);
         setIsRenameColumn(!isRenameColumn);
@@ -28,17 +35,21 @@ const ColumnTitle = ({ id, name, cards }: IColumn) => {
         <>
             {isRenameColumn ? (
                 <Container>
-                    <InputName
-                        value={titleValue}
-                        onChange={(e) => setTitleValue(e.target.value)}
-                    />
-                    <AcceptButton onClick={renameColumn}>
-                        <img src={accept} alt="" />
-                    </AcceptButton>
+                    <ChangeTitleForm onSubmit={handleSubmit(onSubmit)}>
+                        <InputName
+                            {...register("columnTitle", {
+                                required: true,
+                                value: name,
+                            })}
+                        />
+                        <AcceptButton>
+                            <img src={accept} alt="" />
+                        </AcceptButton>
+                    </ChangeTitleForm>
                 </Container>
             ) : (
                 <Container>
-                    <Title disabled={isRenameColumn}>{titleValue}</Title>
+                    <Title disabled={isRenameColumn}>{name}</Title>
                     <RenameButton
                         onClick={() => {
                             setIsRenameColumn(!isRenameColumn);

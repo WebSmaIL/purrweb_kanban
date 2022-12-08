@@ -42,10 +42,9 @@ export const Button = styled.button`
     width: 25px;
     height: 25px;
 
-    transition: all .2s ease;
+    transition: all 0.2s ease;
 
     position: absolute;
-    
 
     cursor: pointer;
 
@@ -57,22 +56,22 @@ export const Button = styled.button`
     &:hover {
         transform: scale(1.1);
     }
-`
+`;
 
 export const DeleteButton = styled(Button)`
     top: 0;
     right: 10px;
-`
+`;
 
 export const ChangeButton = styled(Button)`
     top: 0;
     right: 40px;
-`
+`;
 
 export const InputComment = styled.input`
     background: none;
-    border: 1px solid #505050ff;    
-    margin-bottom: 10px;
+    border: 1px solid #505050ff;
+
     margin-right: 20px;
     padding: 5px 10px;
 
@@ -81,5 +80,32 @@ export const InputComment = styled.input`
 
     &:focus {
         outline: 1px solid #ffffff;
+    }
+`;
+
+export const EditCommentForm = styled.form`
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+`;
+
+export const SubmitButton = styled.button`
+    background: none;
+    border: none;
+
+    width: 30px;
+    height: 30px;
+
+    transition: all 0.2s ease;
+
+    cursor: pointer;
+
+    & img {
+        width: 100%;
+        height: 100%;
+    }
+
+    &:hover {
+        transform: scale(1.1);
     }
 `;

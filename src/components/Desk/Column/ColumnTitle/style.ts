@@ -6,6 +6,10 @@ export const Title = styled.h2<{ disabled: boolean }>`
     font-weight: normal;
     color: #ffffff;
     margin: 0;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 export const Container = styled.div`
@@ -70,3 +74,8 @@ export const AcceptButton = styled.button`
         transform: scale(1.1);
     }
 `;
+
+export const ChangeTitleForm = styled.form`
+    display: flex;
+    align-items: center;
+`

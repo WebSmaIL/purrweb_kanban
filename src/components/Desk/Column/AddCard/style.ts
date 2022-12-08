@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const AddCardButton = styled.button<{ addCardMode: boolean }>`
-    display: ${(props) => (props.addCardMode ? "none" : "flex")};
+export const AddCardButton = styled.button<{ isVisible: boolean }>`
+    display: ${(props) => (props.isVisible ? "none" : "flex")};
     background: none;
     border: none;
     border-radius: 5px;

@@ -1,26 +1,31 @@
 import React from "react";
-import { AcceptAddCardButton, AddCardInput } from './style'
+import { SubmitHandler, useForm } from "react-hook-form";
+import { AcceptAddCardButton, AddCardInput, ChangeTitleForm } from "./style";
 
 interface IProps {
-    isVisible: boolean,
-    value: string,
-    setNewCardName: React.Dispatch<React.SetStateAction<string>>,
-    onAddCard: ()=>void
+    isVisible: boolean;
+    onAddCard: (cardTitle: string) => void;
 }
 
-const AddCardForm = ({isVisible, value, setNewCardName, onAddCard}: IProps) => {
+interface IShippingField {
+    cardTitle: string;
+}
+
+const AddCardForm = ({ isVisible, onAddCard }: IProps) => {
+    const { register, handleSubmit } = useForm<IShippingField>();
+    const onSubmit: SubmitHandler<IShippingField> = ({ cardTitle }) =>
+        onAddCard(cardTitle);
+
     return (
-        <div>
+        <ChangeTitleForm isVisible={isVisible} onSubmit={handleSubmit(onSubmit)}>
             <AddCardInput
-                isVisible={isVisible}
+                {...register("cardTitle", {
+                    required: true,
+                })}
                 placeholder="Enter name..."
-                value={value}
-                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNewCardName(e.target.value)}
             />
-            <AcceptAddCardButton onClick={() => onAddCard()} isVisible={isVisible}>
-                Accept
-            </AcceptAddCardButton>
-        </div>
+            <AcceptAddCardButton>Accept</AcceptAddCardButton>
+        </ChangeTitleForm>
     );
 };
 

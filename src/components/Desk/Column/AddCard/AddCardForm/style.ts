@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const AddCardInput = styled.input<{isVisible: boolean}>`
-    display: ${props => props.isVisible ? 'block' : 'none'};
+export const AddCardInput = styled.input`
+    display: block;
     width: 100%;
     padding: 5px 10px;
     margin-bottom: 10px;
@@ -18,8 +18,8 @@ export const AddCardInput = styled.input<{isVisible: boolean}>`
     }
 `
 
-export const AcceptAddCardButton = styled.button<{isVisible: boolean}>`
-    display: ${props => props.isVisible ? 'flex' : 'none'};
+export const AcceptAddCardButton = styled.button`
+    display: flex;
     background: none;
     border: none;
     border-radius: 5px;
@@ -42,4 +42,8 @@ export const AcceptAddCardButton = styled.button<{isVisible: boolean}>`
         background: #525252;
         color: #dbdbdb;
     }
+`
+
+export const ChangeTitleForm = styled.form<{isVisible: boolean}>`
+    display: ${props => props.isVisible ? 'block' : 'none'};
 `
