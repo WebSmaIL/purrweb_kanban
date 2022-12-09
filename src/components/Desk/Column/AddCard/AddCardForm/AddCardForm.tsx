@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { AcceptAddCardButton, AddCardInput, ChangeTitleForm } from "./style";
 
 interface IProps {
-    isVisible: boolean;
     onAddCard: (cardTitle: string) => void;
 }
 
@@ -11,13 +10,13 @@ interface IShippingField {
     cardTitle: string;
 }
 
-const AddCardForm = ({ isVisible, onAddCard }: IProps) => {
+const AddCardForm = ({ onAddCard }: IProps) => {
     const { register, handleSubmit } = useForm<IShippingField>();
     const onSubmit: SubmitHandler<IShippingField> = ({ cardTitle }) =>
         onAddCard(cardTitle);
 
     return (
-        <ChangeTitleForm isVisible={isVisible} onSubmit={handleSubmit(onSubmit)}>
+        <ChangeTitleForm onSubmit={handleSubmit(onSubmit)}>
             <AddCardInput
                 {...register("cardTitle", {
                     required: true,

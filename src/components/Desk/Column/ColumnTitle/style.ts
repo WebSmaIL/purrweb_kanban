@@ -75,7 +75,7 @@ export const AcceptButton = styled.button`
     }
 `;
 
-export const ChangeTitleForm = styled.form`
+export const TitleChangeForm = styled.form`
     display: flex;
     align-items: center;
 `

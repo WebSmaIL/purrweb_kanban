@@ -25,9 +25,9 @@ const AddCard = ({ id, name, cards }: IColumn) => {
     };
 
     return isEdit ? (
-        <AddCardForm isVisible={isEdit} onAddCard={addCard} />
+        <AddCardForm onAddCard={addCard} />
     ) : (
-        <AddCardButton onClick={() => setIsEdit(!isEdit)} isVisible={isEdit}>
+        <AddCardButton onClick={() => setIsEdit(!isEdit)}>
             <img src={plus} alt="" />
             <span>Add Card</span>
         </AddCardButton>

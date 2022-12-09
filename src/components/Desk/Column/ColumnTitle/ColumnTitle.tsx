@@ -8,7 +8,7 @@ import {
     RenameButton,
     Title,
     AcceptButton,
-    ChangeTitleForm,
+    TitleChangeForm,
 } from "./style";
 import { replaceColumn } from "../../../../helpers/helpers";
 import { IColumn } from "../../../../interfaces/baseInterfaces";
@@ -35,7 +35,7 @@ const ColumnTitle = ({ id, name, cards }: IColumn) => {
         <>
             {isRenameColumn ? (
                 <Container>
-                    <ChangeTitleForm onSubmit={handleSubmit(onSubmit)}>
+                    <TitleChangeForm onSubmit={handleSubmit(onSubmit)}>
                         <InputName
                             {...register("columnTitle", {
                                 required: true,
@@ -45,7 +45,7 @@ const ColumnTitle = ({ id, name, cards }: IColumn) => {
                         <AcceptButton>
                             <img src={accept} alt="" />
                         </AcceptButton>
-                    </ChangeTitleForm>
+                    </TitleChangeForm>
                 </Container>
             ) : (
                 <Container>

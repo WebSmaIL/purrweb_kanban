@@ -44,6 +44,6 @@ export const AcceptAddCardButton = styled.button`
     }
 `
 
-export const ChangeTitleForm = styled.form<{isVisible: boolean}>`
-    display: ${props => props.isVisible ? 'block' : 'none'};
+export const ChangeTitleForm = styled.form`
+    display: block;
 `

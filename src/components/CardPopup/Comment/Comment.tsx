@@ -35,7 +35,7 @@ const Comment = ({ id, author, content, cardInfo, currentCard }: IProps) => {
 
     const { register, handleSubmit } = useForm<IShippingFields>();
 
-    const onSubmitEditComment: SubmitHandler<IShippingFields> = ({
+    const onFormSubmit: SubmitHandler<IShippingFields> = ({
         commentText,
     }) => {
         const cardCopy = cloneDeep(currentCard);
@@ -67,7 +67,7 @@ const Comment = ({ id, author, content, cardInfo, currentCard }: IProps) => {
                 <i>{author}</i>:
             </Author>
             {isEdit ? (
-                <EditCommentForm onSubmit={handleSubmit(onSubmitEditComment)}>
+                <EditCommentForm onSubmit={handleSubmit(onFormSubmit)}>
                     <InputComment
                         {...register("commentText", {
                             required: true,
