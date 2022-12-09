@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import {
     LoginWrapper,
     LoginContainer,
@@ -12,27 +13,27 @@ interface IProps {
     setName: React.Dispatch<any>;
 }
 
+interface IUserName {
+    userName: string;
+}
+
 const LoginPopup = ({ setName }: IProps) => {
-    const [inputText, setInputText] = useState("");
+    const { register, handleSubmit } = useForm<IUserName>();
+    const onSubmit: SubmitHandler<IUserName> = ({ userName }) => setName(userName);
 
     return (
-        <LoginWrapper>
+        <LoginWrapper> 
             <LoginContainer>
                 <Title>Welcome to the KANBAN</Title>
-                <LoginForm>
+                <LoginForm onSubmit={handleSubmit(onSubmit)}>
                     <InputName
+                        {...register("userName", {
+                            required: true,
+                        })}
                         placeholder="Enter your name..."
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
+                        type="text"
                     />
-                    <SubmitButton
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setName(inputText);
-                        }}
-                    >
-                        OK
-                    </SubmitButton>
+                    <SubmitButton>OK</SubmitButton>
                 </LoginForm>
             </LoginContainer>
         </LoginWrapper>

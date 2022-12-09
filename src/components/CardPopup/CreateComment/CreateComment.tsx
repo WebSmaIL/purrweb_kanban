@@ -1,47 +1,49 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { CommentInput, NewCommentForm, SendButton } from "./style";
 import { send } from "../../../assets";
 import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
 import { StateContext } from "../../../api/ContextAPI";
 import { replaceCard } from "../../../helpers/helpers";
 import { cloneDeep } from "lodash";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 interface IProps {
     cardInfo: ICardInfo;
     currentCard: ICard;
 }
 
+interface IShippingField {
+    commentText: string;
+}
+
 const CreateComment = ({ cardInfo, currentCard }: IProps) => {
-    const [commentText, setCommentText] = useState("");
     const context = useContext(StateContext);
 
-    const addComment = (author: string, content: string) => {
+    const { register, handleSubmit, reset } = useForm<IShippingField>();
+    
+    const onSubmit: SubmitHandler<IShippingField> = ({ commentText }) => {
         const comment = {
             id: Date.now(),
-            author,
-            content,
+            author: context.userName,
+            content: commentText,
         };
         const cardCopy = cloneDeep(currentCard);
         cardCopy.comments.push(comment);
 
         const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
         context.setColumns(updatedColumns);
-        setCommentText("");
+        reset();
     };
 
     return (
-        <NewCommentForm>
+        <NewCommentForm onSubmit={handleSubmit(onSubmit)}>
             <CommentInput
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
+                {...register("commentText", {
+                    required: true,
+                })}
                 placeholder="Enter comment text..."
             ></CommentInput>
-            <SendButton
-                onClick={(e) => {
-                    e.preventDefault();
-                    addComment(context.userName, commentText);
-                }}
-            >
+            <SendButton>
                 <img src={send} alt="" />
             </SendButton>
         </NewCommentForm>
