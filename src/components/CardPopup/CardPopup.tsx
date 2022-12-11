@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
     BackdropWrapper,
     CardContainer,
@@ -14,19 +14,21 @@ import {
 } from "./style";
 import { pen, close } from "../../assets/index";
 import Comment from "./Comment/Comment";
-import { ICardInfo } from "../../interfaces/baseInterfaces";
+import { ICardInfo, IColumn } from "../../interfaces/baseInterfaces";
 import EditDescription from "./EditDescription/EditDescription";
 import CreateComment from "./CreateComment/CreateComment";
-import { StateContext } from "../../api/ContextAPI";
 import Title from "./Title/Title";
-import { cloneDeep } from "lodash";
-import { replaceColumn } from "../../helpers/helpers";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { setViewedCard } from "../../redux/ducks/viewedCard/reducers";
+import { deleteCard } from "../../redux/ducks/columns/reducers";
 
 const CardPopup = ({ cardId, columnId }: ICardInfo) => {
     const [isEditDescription, setIsEditDescription] = useState(false);
-    const context = useContext(StateContext);
 
-    const currentColumn = context.columns.find(
+    const columns = useAppSelector((state) => state.columns.columns);
+    const dispatch = useAppDispatch();
+
+    const currentColumn: IColumn | undefined = columns.find(
         (column: { id: number }) => column.id === columnId
     );
 
@@ -34,20 +36,14 @@ const CardPopup = ({ cardId, columnId }: ICardInfo) => {
         (card: { id: number }) => card.id === cardId
     );
 
-    const deleteCard = () => {
-        const columnCopy = cloneDeep(currentColumn);
-        if (columnCopy) {
-            columnCopy.cards = columnCopy.cards.filter(
-                (card) => card.id !== cardId
-            );
-            const updatedColumns = replaceColumn(
-                context.columns,
-                columnId,
-                columnCopy
-            );
-            context.setViewedCard(undefined);
-            context.setColumns(updatedColumns);
-        }
+    const onDeleteCard = () => {
+        dispatch(deleteCard({ cardId, columnId }));
+        dispatch(
+            setViewedCard({
+                cardId: undefined,
+                columnId: undefined,
+            })
+        );
     };
 
     return (
@@ -55,7 +51,14 @@ const CardPopup = ({ cardId, columnId }: ICardInfo) => {
             {currentColumn && currentCard && (
                 <CardContainer>
                     <CloseButton
-                        onClick={() => context.setViewedCard(undefined)}
+                        onClick={() =>
+                            dispatch(
+                                setViewedCard({
+                                    cardId: undefined,
+                                    columnId: undefined,
+                                })
+                            )
+                        }
                     >
                         <img src={close} alt="" />
                     </CloseButton>
@@ -101,10 +104,8 @@ const CardPopup = ({ cardId, columnId }: ICardInfo) => {
                                 <Comment
                                     currentCard={currentCard}
                                     cardInfo={{ cardId, columnId }}
+                                    commentInfo={comment}
                                     key={comment.id}
-                                    id={comment.id}
-                                    author={comment.author}
-                                    content={comment.content}
                                 />
                             ))}
                         </CommentsContainer>
@@ -113,7 +114,7 @@ const CardPopup = ({ cardId, columnId }: ICardInfo) => {
                             cardInfo={{ cardId, columnId }}
                         />
                     </CommentsWrapper>
-                    <DeleteButton onClick={deleteCard}>
+                    <DeleteButton onClick={onDeleteCard}>
                         Delete card
                     </DeleteButton>
                 </CardContainer>

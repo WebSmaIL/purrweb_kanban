@@ -1,33 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Desk from "./components/Desk/Desk";
 import SideBar from "./components/Sidebar/Sidebar";
 import { Wrapper } from "./style";
-import { LocalStorageAPI } from "./api/LocalStorageAPI";
-import { StateContext, ContextState } from "./api/ContextAPI";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
 import CardPopup from "./components/CardPopup/CardPopup";
-import { ICardInfo } from "./interfaces/baseInterfaces";
+import { useAppSelector } from "./hooks";
 
 const App = (): JSX.Element => {
-    const [columns, setColumns] = useState(ContextState);
-    useEffect(() => LocalStorageAPI.updateColumns(columns), [columns]);
-
-    const [name, setName] = useState(LocalStorageAPI.getName());
-    useEffect(() => LocalStorageAPI.updateName(name), [name]);
-
-    const [viewedCard, setViewedCard] = useState<ICardInfo | undefined>(undefined);
+    const userName = useAppSelector((state) => state.userInfo.name);
+    const viewedCard = useAppSelector((state) => state.viewedCard);
 
     return (
-        <StateContext.Provider
-            value={{ columns, setColumns, setViewedCard, userName: name }}
-        >
-            <Wrapper>
-                <SideBar Name={name} />
-                <Desk columns={columns} />
-                {!name && <LoginPopup setName={setName} />}
-                {viewedCard && <CardPopup columnId={viewedCard.columnId} cardId={viewedCard.cardId} />}
-            </Wrapper>
-        </StateContext.Provider>
+        <Wrapper>
+            <SideBar Name={userName} />
+            <Desk />
+            {!userName && <LoginPopup />}
+            {viewedCard.columnId && viewedCard.cardId ? (
+                <CardPopup
+                    columnId={viewedCard.columnId}
+                    cardId={viewedCard.cardId}
+                />
+            ) : null}
+        </Wrapper>
     );
 };
 

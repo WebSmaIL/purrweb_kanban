@@ -2,12 +2,11 @@ import React from "react";
 import Column from "./Column/Column";
 import { IColumn } from "../../interfaces/baseInterfaces";
 import { Container, DeskWrapper, Title } from "./style";
+import { useAppSelector } from "../../hooks";
 
-interface IProps {
-    columns: IColumn[];
-}
+const Desk = (): JSX.Element => {
+    const columns = useAppSelector(state => state.columns.columns);
 
-const Desk = ({ columns }: IProps): JSX.Element => {
     return (
         <Container>
             <Title>Your Desk</Title>

@@ -1,26 +1,25 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import AddCardForm from "./AddCardForm/AddCardForm";
-import { StateContext } from "../../../../api/ContextAPI";
 import { ICard, IColumn } from "../../../../interfaces/baseInterfaces";
 import { AddCardButton } from "./style";
 import { plus } from "../../../../assets";
-import { replaceColumn } from "../../../../helpers/helpers";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { updateColumns } from "../../../../redux/ducks/columns/reducers";  
 
 const AddCard = ({ id, name, cards }: IColumn) => {
-    const context = useContext(StateContext);
+    const dispatch = useAppDispatch();
+    const userName = useAppSelector(state => state.userInfo.name);
     const [isEdit, setIsEdit] = useState(false);
 
     const addCard = (cardTitle: string) => {
         const card: ICard = {
             id: Number(Date.now()),
-            author: context.userName,
+            author: userName,
             name: cardTitle,
             description: "",
             comments: [],
         };
-        const column = { id, name, cards: [...cards, card] };
-        const updatedColumns = replaceColumn(context.columns, id, column);
-        context.setColumns(updatedColumns);
+        dispatch(updateColumns({ id, name, cards: [...cards, card] }));
         setIsEdit(!isEdit);
     };
 

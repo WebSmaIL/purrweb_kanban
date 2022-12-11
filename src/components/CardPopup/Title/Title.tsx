@@ -1,11 +1,12 @@
-import { cloneDeep } from "lodash";
-import React, { useContext, useState } from "react";
-import { StateContext } from "../../../api/ContextAPI";
-import { replaceCard } from "../../../helpers/helpers";
+import React, { useState } from "react";
 import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
 import { InputTitle, CardTitle, UpdateTitleForm, SubmitButton } from "./style";
 import { accept } from "../../../assets";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch } from "../../../hooks";
+import {
+    updateCards,
+} from "../../../redux/ducks/columns/reducers";
 
 interface IProps {
     currentCard: ICard;
@@ -13,28 +14,30 @@ interface IProps {
 }
 
 interface IShippingField {
-    cardTitle: string;
+    name: string;
 }
 
 const Title = ({ currentCard, cardInfo }: IProps) => {
-    const context = useContext(StateContext);
+    const dispatch = useAppDispatch();
 
     const [isEdit, setIsEdit] = useState(false);
 
     const { register, handleSubmit } = useForm<IShippingField>();
 
-    const onSubmit: SubmitHandler<IShippingField> = ({ cardTitle }) => {
-        const cardCopy = cloneDeep(currentCard);
-        cardCopy.name = cardTitle;
-        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
-        context.setColumns(updatedColumns);
+    const onSubmit: SubmitHandler<IShippingField> = ({ name }) => {
+        dispatch(
+            updateCards({
+                currentCard: { ...currentCard, name },
+                cardInfo,
+            })
+        );
         setIsEdit(false);
     };
 
     return isEdit ? (
         <UpdateTitleForm onSubmit={handleSubmit(onSubmit)}>
             <InputTitle
-                {...register("cardTitle", {
+                {...register("name", {
                     required: true,
                     value: currentCard.name,
                 })}

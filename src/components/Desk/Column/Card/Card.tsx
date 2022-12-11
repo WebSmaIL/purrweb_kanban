@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { IComment } from "../../../../interfaces/baseInterfaces";
 import view from "../../../../assets/view.svg";
 import { comment } from "../../../../assets";
@@ -9,7 +9,8 @@ import {
     TitleContainer,
     ViewButton,
 } from "./style";
-import { StateContext } from "../../../../api/ContextAPI";
+import { useAppDispatch } from "../../../../hooks";
+import {setViewedCard} from "../../../../redux/ducks/viewedCard/reducers";
 
 interface IProps {
     columnId: number;
@@ -19,13 +20,13 @@ interface IProps {
 }
 
 const Card = ({ id, columnId, name, comments }: IProps) => {
-    const context = useContext(StateContext);
+    const dispatch = useAppDispatch();
 
     return (
         <CardContainer>
             <TitleContainer>
                 <CardTitle>{name}</CardTitle>
-                <ViewButton onClick={()=> context.setViewedCard({cardId: id, columnId})}>
+                <ViewButton onClick={()=> dispatch(setViewedCard({cardId: id, columnId}))}>
                     <img src={view} alt="" />
                 </ViewButton>
             </TitleContainer>

@@ -1,4 +1,6 @@
 import React from "react";
+import { useAppDispatch } from "../../hooks";
+import { setUserName } from "../../redux/ducks/user/reducers";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
     LoginWrapper,
@@ -9,20 +11,20 @@ import {
     SubmitButton,
 } from "./style";
 
-interface IProps {
-    setName: React.Dispatch<any>;
-}
-
 interface IUserName {
     userName: string;
 }
 
-const LoginPopup = ({ setName }: IProps) => {
+const LoginPopup = () => {
+    const dispatch = useAppDispatch();
+
     const { register, handleSubmit } = useForm<IUserName>();
-    const onSubmit: SubmitHandler<IUserName> = ({ userName }) => setName(userName);
+
+    const onSubmit: SubmitHandler<IUserName> = ({ userName }) =>
+        dispatch(setUserName(userName));
 
     return (
-        <LoginWrapper> 
+        <LoginWrapper>
             <LoginContainer>
                 <Title>Welcome to the KANBAN</Title>
                 <LoginForm onSubmit={handleSubmit(onSubmit)}>
