@@ -10,25 +10,21 @@ import {
     SubmitButton,
 } from "./style";
 import { pen, del, accept } from "../../../assets";
-import { ICard, ICardInfo, IComment } from "../../../interfaces/baseInterfaces";
+import { ICardNew, ICommentNew } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../hooks";
-import {
-    deleteComment,
-    updateComment,
-} from "../../../redux/ducks/columns/reducers";
+import { deleteComment, updateComments } from "../../../redux/ducks/comments";
 
 interface IProps {
-    cardInfo: ICardInfo;
-    currentCard: ICard;
-    commentInfo: IComment;
+    currentCard: ICardNew;
+    commentInfo: ICommentNew;
 }
 
 interface IShippingFields {
     commentText: string;
 }
 
-const Comment = ({ commentInfo, cardInfo, currentCard }: IProps) => {
+const Comment = ({ commentInfo, currentCard }: IProps) => {
     const dispatch = useAppDispatch();
 
     const [isEdit, setIsEdit] = useState(false);
@@ -37,11 +33,9 @@ const Comment = ({ commentInfo, cardInfo, currentCard }: IProps) => {
 
     const onFormSubmit: SubmitHandler<IShippingFields> = ({ commentText }) => {
         dispatch(
-            updateComment({
-                cardInfo,
-                currentCard,
-                commentId: commentInfo.id,
-                commentText,
+            updateComments({
+                ...commentInfo,
+                content: commentText,
             })
         );
         setIsEdit(!isEdit);
@@ -57,7 +51,7 @@ const Comment = ({ commentInfo, cardInfo, currentCard }: IProps) => {
                     <InputComment
                         {...register("commentText", {
                             required: true,
-                            value: commentInfo.content
+                            value: commentInfo.content,
                         })}
                     />
                     <SubmitButton>
@@ -77,15 +71,7 @@ const Comment = ({ commentInfo, cardInfo, currentCard }: IProps) => {
                         <img src={pen} alt="" />
                     </ChangeButton>
                     <DeleteButton
-                        onClick={() =>
-                            dispatch(
-                                deleteComment({
-                                    cardInfo,
-                                    currentCard,
-                                    commentId: commentInfo.id,
-                                })
-                            )
-                        }
+                        onClick={() => dispatch(deleteComment(commentInfo.id))}
                     >
                         <img src={del} alt="" />
                     </DeleteButton>

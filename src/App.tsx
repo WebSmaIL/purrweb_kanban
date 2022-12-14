@@ -1,27 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Desk from "./components/Desk/Desk";
 import SideBar from "./components/Sidebar/Sidebar";
 import { Wrapper } from "./style";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
-import CardPopup from "./components/CardPopup/CardPopup";
 import { useAppSelector } from "./hooks";
+import { ICardInfo } from "./interfaces/baseInterfaces";
+import CardPopupContainer from "./components/CardPopup/CardPopupContainer";
+import { getName } from "./redux/ducks/user";
+
+interface IContextState {
+    setViewedCard: React.Dispatch<React.SetStateAction<ICardInfo | undefined>> | undefined
+}
+
+const initialState: IContextState = {
+    setViewedCard: undefined
+}
+
+export const ViewedContext = React.createContext<IContextState>(initialState);
 
 const App = (): JSX.Element => {
-    const userName = useAppSelector((state) => state.userInfo.name);
-    const viewedCard = useAppSelector((state) => state.viewedCard);
+    const userName = useAppSelector(getName);
+
+    const [viewedCard, setViewedCard] = useState<ICardInfo | undefined>(
+        undefined
+    );
 
     return (
-        <Wrapper>
-            <SideBar Name={userName} />
-            <Desk />
-            {!userName && <LoginPopup />}
-            {viewedCard.columnId && viewedCard.cardId ? (
-                <CardPopup
-                    columnId={viewedCard.columnId}
-                    cardId={viewedCard.cardId}
-                />
-            ) : null}
-        </Wrapper>
+        <ViewedContext.Provider value={{setViewedCard}}>
+            <Wrapper>
+                <SideBar Name={userName} />
+                <Desk setViewedCard={setViewedCard} />
+                {!userName && <LoginPopup />}
+                {viewedCard && (
+                    <CardPopupContainer
+                        columnId={viewedCard.columnId}
+                        cardId={viewedCard.cardId}
+                    />
+                )}
+            </Wrapper>
+        </ViewedContext.Provider>
     );
 };
 

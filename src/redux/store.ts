@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { userInfo, columns, viewedCard } from "./ducks";
+import { userInfo, columns, cardsReducer, commentsReducer } from "./ducks";
 import storage from "redux-persist/lib/storage";
 import {
     persistReducer,
@@ -20,7 +20,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     userInfo,
     columns,
-    viewedCard,
+    cardsReducer,
+    commentsReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

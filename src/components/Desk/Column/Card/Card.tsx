@@ -1,5 +1,4 @@
-import React from "react";
-import { IComment } from "../../../../interfaces/baseInterfaces";
+import React, { useContext } from "react";
 import view from "../../../../assets/view.svg";
 import { comment } from "../../../../assets";
 import {
@@ -9,30 +8,37 @@ import {
     TitleContainer,
     ViewButton,
 } from "./style";
-import { useAppDispatch } from "../../../../hooks";
-import {setViewedCard} from "../../../../redux/ducks/viewedCard/reducers";
+import { useAppSelector } from "../../../../hooks";
+import { getAllComments } from "../../../../redux/ducks/comments";
+import { ViewedContext } from "../../../../App";
 
 interface IProps {
     columnId: number;
     id: number;
     name: string;
-    comments: IComment[]
 }
 
-const Card = ({ id, columnId, name, comments }: IProps) => {
-    const dispatch = useAppDispatch();
+const Card = ({ id, columnId, name }: IProps) => {
+    const { setViewedCard } = useContext(ViewedContext);
+    const commentsCount = useAppSelector(getAllComments).filter(
+        (comment) => comment.cardId === id
+    ).length;
 
     return (
         <CardContainer>
             <TitleContainer>
                 <CardTitle>{name}</CardTitle>
-                <ViewButton onClick={()=> dispatch(setViewedCard({cardId: id, columnId}))}>
+                <ViewButton
+                    onClick={() =>
+                        setViewedCard && setViewedCard({ cardId: id, columnId })
+                    }
+                >
                     <img src={view} alt="" />
                 </ViewButton>
             </TitleContainer>
             <CommentContainer>
                 <img src={comment} alt="" />
-                <span>{comments.length}</span>
+                <span>{commentsCount}</span>
             </CommentContainer>
         </CardContainer>
     );

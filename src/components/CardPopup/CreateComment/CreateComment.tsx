@@ -1,40 +1,34 @@
 import React from "react";
 import { CommentInput, NewCommentForm, SendButton } from "./style";
 import { send } from "../../../assets";
-import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
+import { ICardNew, ICommentNew } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { updateCards } from "../../../redux/ducks/columns/reducers";
+import { addComment } from "../../../redux/ducks/comments";
 
 interface IProps {
-    cardInfo: ICardInfo;
-    currentCard: ICard;
+    currentCard: ICardNew;
 }
 
 interface IShippingField {
     commentText: string;
 }
 
-const CreateComment = ({ cardInfo, currentCard }: IProps) => {
+const CreateComment = ({ currentCard }: IProps) => {
     const userName = useAppSelector((state) => state.userInfo.name);
     const dispatch = useAppDispatch();
 
     const { register, handleSubmit, reset } = useForm<IShippingField>();
 
     const onSubmit: SubmitHandler<IShippingField> = ({ commentText }) => {
-        const comment = {
+        const comment: ICommentNew = {
             id: Date.now(),
+            cardId: currentCard.id,
             author: userName,
             content: commentText,
         };
         dispatch(
-            updateCards({
-                currentCard: {
-                    ...currentCard,
-                    comments: [...currentCard.comments, comment],
-                },
-                cardInfo,
-            })
+            addComment(comment)
         );
         reset();
     };

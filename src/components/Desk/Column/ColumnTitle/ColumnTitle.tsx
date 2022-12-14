@@ -9,15 +9,21 @@ import {
     AcceptButton,
     TitleChangeForm,
 } from "./style";
-import { updateColumns } from "../../../../redux/ducks/columns/reducers";  
-import { IColumn } from "../../../../interfaces/baseInterfaces";
+import { updateColumns } from "../../../../redux/ducks/columns/slice";  
+import { ICardNew } from "../../../../interfaces/baseInterfaces";
 import { useAppDispatch } from "../../../../hooks";
 
 interface IShippingField {
     columnTitle: string;
 }
 
-const ColumnTitle = ({ id, name, cards }: IColumn) => {
+interface IProps {
+    id: number,
+    name: string,
+    cards: ICardNew[]
+}
+
+const ColumnTitle = ({ id, name, cards }: IProps) => {
     const dispatch = useAppDispatch();
 
     const [isRenameColumn, setIsRenameColumn] = useState(false);
@@ -25,7 +31,7 @@ const ColumnTitle = ({ id, name, cards }: IColumn) => {
     const { register, handleSubmit } = useForm<IShippingField>();
 
     const onSubmit: SubmitHandler<IShippingField> = ({ columnTitle }) => {
-        dispatch(updateColumns({id, name: columnTitle, cards }));
+        dispatch(updateColumns({id, name: columnTitle }));
         setIsRenameColumn(!isRenameColumn);
     };
 

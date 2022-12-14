@@ -1,30 +1,31 @@
 import React, { useState } from "react";
 import AddCardForm from "./AddCardForm/AddCardForm";
-import { ICard, IColumn } from "../../../../interfaces/baseInterfaces";
+import { ICardNew, IColumnNew } from "../../../../interfaces/baseInterfaces";
 import { AddCardButton } from "./style";
 import { plus } from "../../../../assets";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
-import { updateColumns } from "../../../../redux/ducks/columns/reducers";  
+import { addCard } from "../../../../redux/ducks/cards";
+import { getName } from "../../../../redux/ducks/user";
 
-const AddCard = ({ id, name, cards }: IColumn) => {
+const AddCard = ({ id }: IColumnNew) => {
     const dispatch = useAppDispatch();
-    const userName = useAppSelector(state => state.userInfo.name);
+    const userName = useAppSelector(getName);
     const [isEdit, setIsEdit] = useState(false);
 
-    const addCard = (cardTitle: string) => {
-        const card: ICard = {
+    const onAddCard = (cardTitle: string) => {
+        const card: ICardNew = {
             id: Number(Date.now()),
             author: userName,
             name: cardTitle,
             description: "",
-            comments: [],
+            columnId: id,
         };
-        dispatch(updateColumns({ id, name, cards: [...cards, card] }));
+        dispatch(addCard(card));
         setIsEdit(!isEdit);
     };
 
     return isEdit ? (
-        <AddCardForm onAddCard={addCard} />
+        <AddCardForm onAddCard={onAddCard} />
     ) : (
         <AddCardButton onClick={() => setIsEdit(!isEdit)}>
             <img src={plus} alt="" />

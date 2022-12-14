@@ -1,24 +1,26 @@
-export interface ICard {
-    id: number;
-    name: string;
-    author: string;
-    description: string;
-    comments: IComment[];
-}
-
-export interface IColumn {
-    id: number;
-    name: string;
-    cards: ICard[];
-}
-
-export interface IComment {
-    id: number;
-    author: string;
-    content: string;
-}
-
 export interface ICardInfo {
     columnId: number;
     cardId: number;
+}
+
+
+
+export interface IColumnNew {
+    id: number;
+    name: string;
+}
+
+export interface ICardNew {
+    id: number;
+    columnId: number;
+    name: string;
+    author: string;
+    description: string;
+}
+
+export interface ICommentNew {
+    id: number;
+    cardId: number;
+    author: string;
+    content: string;
 }
