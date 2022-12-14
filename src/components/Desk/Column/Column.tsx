@@ -1,18 +1,19 @@
 import React from "react";
-import { ICardNew } from "../../../interfaces/baseInterfaces";
 import { ColumnWrapper } from "./style";
 import Card from "./Card/Card";
 import ColumnTitle from "./ColumnTitle/ColumnTitle";
 import AddCard from "./AddCard/AddCard";
+import { useAppSelector } from "../../../hooks";
+import { getCardsByColumnId } from "../../../redux/ducks/cards";
 
 interface IProps {
-    id: number,
-    name: string,
-    cards: ICardNew[]
+    id: number;
+    name: string;
 }
 
-const Column = ({ id, name, cards }: IProps): JSX.Element => {
-    console.log(`колонка ${id}`)
+const Column = ({ id, name }: IProps): JSX.Element => {
+    const cards = useAppSelector(getCardsByColumnId(id));
+
     return (
         <ColumnWrapper>
             <ColumnTitle id={id} name={name} cards={cards} />
@@ -28,7 +29,7 @@ const Column = ({ id, name, cards }: IProps): JSX.Element => {
                 ) : null
             )}
 
-            <AddCard id={id} name={name}/>
+            <AddCard id={id} name={name} />
         </ColumnWrapper>
     );
 };

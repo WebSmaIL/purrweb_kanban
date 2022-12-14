@@ -1,13 +1,13 @@
 import React from "react";
 import { DescriptionForm, DescriptionInput, SubmitDescription } from "./style";
 import { send } from "../../../assets";
-import { ICardNew } from "../../../interfaces/baseInterfaces";
+import { ICard } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../hooks";
 import { updateCards } from "../../../redux/ducks/cards";
 
 interface IProps {
-    currentCard: ICardNew;
+    currentCard: ICard;
     setIsEditDescription: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

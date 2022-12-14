@@ -1,12 +1,9 @@
-import { IColumnNew } from "../interfaces/baseInterfaces";
-
-
+import { IColumn } from "../interfaces/baseInterfaces";
 
 export const replaceColumn = (
-    columns: IColumnNew[],
+    columns: IColumn[],
     id: number,
-    newColumn: IColumnNew
+    newColumn: IColumn
 ) => {
-    return columns.map((column) => column.id === id ? newColumn : column);
+    return columns.map((column) => (column.id === id ? newColumn : column));
 };
-

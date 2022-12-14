@@ -14,22 +14,30 @@ import {
 } from "./style";
 import { pen, close } from "../../assets/index";
 import Comment from "./Comment/Comment";
-import { ICardNew, ICommentNew } from "../../interfaces/baseInterfaces";
+import { ICardInfo } from "../../interfaces/baseInterfaces";
 import EditDescription from "./EditDescription/EditDescription";
 import CreateComment from "./CreateComment/CreateComment";
 import Title from "./Title/Title";
 import { ViewedContext } from "../../App";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getCommentsByCardId } from "../../redux/ducks/comments";
+import { deleteCard, getCardById } from "../../redux/ducks/cards";
+import { getColumnByIdSelector } from "../../redux/ducks/columns/";
 
 interface IProps {
-    comments: ICommentNew[];
-    currentCard: ICardNew | undefined;
-    columnName: string | undefined;
-    onDeleteCard: (cardId: number) => void;
+    cardInfo: ICardInfo;
 }
 
-const CardPopup = ({ currentCard, comments, onDeleteCard, columnName }: IProps) => {
+const CardPopup = ({ cardInfo }: IProps) => {
     const { setViewedCard } = useContext(ViewedContext);
     const [isEditDescription, setIsEditDescription] = useState(false);
+
+    const comments = useAppSelector(getCommentsByCardId(cardInfo.cardId));
+    const currentCard = useAppSelector(getCardById(cardInfo.cardId));
+    const columnName = useAppSelector(getColumnByIdSelector(cardInfo.columnId))?.name;
+
+    const dispatch = useAppDispatch();
+
 
     return (
         <BackdropWrapper>
@@ -89,7 +97,7 @@ const CardPopup = ({ currentCard, comments, onDeleteCard, columnName }: IProps) 
                     <DeleteButton
                         onClick={() => {
                             setViewedCard && setViewedCard(undefined);
-                            onDeleteCard(currentCard.id);
+                            dispatch(deleteCard(cardInfo.cardId));
                         }}
                     >
                         Delete card

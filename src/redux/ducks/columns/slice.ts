@@ -1,32 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IColumnNew } from "../../../interfaces/baseInterfaces";
+import { IColumn } from "../../../interfaces/baseInterfaces";
 import { replaceColumn } from "../../../helpers/helpers";
 
 interface IColumnsState {
-    columns: IColumnNew[];
+    columns: IColumn[];
 }
 
-const defaultColumns = [
+const defaultColumns: IColumn[] = [
     {
         id: 1,
         name: "TODO",
-        cards: [],
     },
     {
         id: 2,
         name: "In Progress",
-        cards: [],
     },
     {
         id: 3,
         name: "Testing",
-        cards: [],
     },
     {
         id: 4,
         name: "Done",
-        cards: [],
     },
 ];
 
@@ -38,7 +34,7 @@ const columnsSlice = createSlice({
     name: "columns",
     initialState,
     reducers: {
-        updateColumns: (state, action: PayloadAction<IColumnNew>) => {
+        updateColumns: (state, action: PayloadAction<IColumn>) => {
             const column = {
                 id: action.payload.id,
                 name: action.payload.name

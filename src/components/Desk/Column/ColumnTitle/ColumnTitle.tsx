@@ -10,7 +10,7 @@ import {
     TitleChangeForm,
 } from "./style";
 import { updateColumns } from "../../../../redux/ducks/columns/slice";  
-import { ICardNew } from "../../../../interfaces/baseInterfaces";
+import { ICard } from "../../../../interfaces/baseInterfaces";
 import { useAppDispatch } from "../../../../hooks";
 
 interface IShippingField {
@@ -20,7 +20,7 @@ interface IShippingField {
 interface IProps {
     id: number,
     name: string,
-    cards: ICardNew[]
+    cards: ICard[]
 }
 
 const ColumnTitle = ({ id, name, cards }: IProps) => {

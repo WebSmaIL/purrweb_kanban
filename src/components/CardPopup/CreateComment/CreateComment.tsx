@@ -1,13 +1,13 @@
 import React from "react";
 import { CommentInput, NewCommentForm, SendButton } from "./style";
 import { send } from "../../../assets";
-import { ICardNew, ICommentNew } from "../../../interfaces/baseInterfaces";
+import { ICard, IComment } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { addComment } from "../../../redux/ducks/comments";
 
 interface IProps {
-    currentCard: ICardNew;
+    currentCard: ICard;
 }
 
 interface IShippingField {
@@ -21,7 +21,7 @@ const CreateComment = ({ currentCard }: IProps) => {
     const { register, handleSubmit, reset } = useForm<IShippingField>();
 
     const onSubmit: SubmitHandler<IShippingField> = ({ commentText }) => {
-        const comment: ICommentNew = {
+        const comment: IComment = {
             id: Date.now(),
             cardId: currentCard.id,
             author: userName,

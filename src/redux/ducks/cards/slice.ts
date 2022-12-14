@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ICardNew } from "../../../interfaces/baseInterfaces";
+import { ICard } from "../../../interfaces/baseInterfaces";
 
-const initialState: ICardNew[] = [];
+const initialState: ICard[] = [];
 
 const cardsSlice = createSlice({
     name: "cards",
     initialState,
     reducers: {
-        addCard: (state, action: PayloadAction<ICardNew>) => {
+        addCard: (state, action: PayloadAction<ICard>) => {
             state.push({
                 author: action.payload.author,
                 columnId: action.payload.columnId,
@@ -18,7 +18,7 @@ const cardsSlice = createSlice({
             });
         },
 
-        updateCards: (state, action: PayloadAction<ICardNew>) => {
+        updateCards: (state, action: PayloadAction<ICard>) => {
             const index = state.findIndex(
                 (card: { id: number }) => card.id === action.payload.id
             );

@@ -5,16 +5,18 @@ import { Wrapper } from "./style";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
 import { useAppSelector } from "./hooks";
 import { ICardInfo } from "./interfaces/baseInterfaces";
-import CardPopupContainer from "./components/CardPopup/CardPopupContainer";
 import { getName } from "./redux/ducks/user";
+import CardPopup from "./components/CardPopup/CardPopup";
 
 interface IContextState {
-    setViewedCard: React.Dispatch<React.SetStateAction<ICardInfo | undefined>> | undefined
+    setViewedCard:
+        | React.Dispatch<React.SetStateAction<ICardInfo | undefined>>
+        | undefined;
 }
 
 const initialState: IContextState = {
-    setViewedCard: undefined
-}
+    setViewedCard: undefined,
+};
 
 export const ViewedContext = React.createContext<IContextState>(initialState);
 
@@ -26,15 +28,17 @@ const App = (): JSX.Element => {
     );
 
     return (
-        <ViewedContext.Provider value={{setViewedCard}}>
+        <ViewedContext.Provider value={{ setViewedCard }}>
             <Wrapper>
                 <SideBar Name={userName} />
-                <Desk setViewedCard={setViewedCard} />
+                <Desk />
                 {!userName && <LoginPopup />}
                 {viewedCard && (
-                    <CardPopupContainer
-                        columnId={viewedCard.columnId}
-                        cardId={viewedCard.cardId}
+                    <CardPopup
+                        cardInfo={{
+                            columnId: viewedCard.columnId,
+                            cardId: viewedCard.cardId,
+                        }}
                     />
                 )}
             </Wrapper>

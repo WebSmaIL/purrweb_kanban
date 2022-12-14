@@ -1,24 +1,20 @@
 import React from "react";
-import { ICardInfo, IColumnNew } from "../../interfaces/baseInterfaces";
+import { IColumn } from "../../interfaces/baseInterfaces";
 import { Container, DeskWrapper, Title } from "./style";
 import { useAppSelector } from "../../hooks";
 import { getAllColumns } from "../../redux/ducks/columns";
-import ColumnContainer from "./Column/ColumnContainer";
+import Column from "./Column/Column";
 
-interface IProps {
-    setViewedCard: React.Dispatch<React.SetStateAction<ICardInfo | undefined>>;
-}
-
-const Desk = ({ setViewedCard }: IProps): JSX.Element => {
+const Desk = (): JSX.Element => {
     const columns = useAppSelector(getAllColumns);
 
     return (
         <Container>
             <Title>Your Desk</Title>
             <DeskWrapper>
-                {columns.map((element: IColumnNew): JSX.Element => {
+                {columns.map((element: IColumn): JSX.Element => {
                     return (
-                        <ColumnContainer
+                        <Column
                             key={element.id}
                             id={element.id}
                             name={element.name}

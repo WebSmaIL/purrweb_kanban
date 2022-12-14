@@ -1,3 +1,3 @@
 export { default as columns } from "./slice";
-export { getAllColumns } from "./selectors";
+export { getAllColumns, getColumnByIdSelector } from "./selectors";
 export { updateColumns } from "./slice";

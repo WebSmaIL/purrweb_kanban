@@ -10,14 +10,14 @@ import {
     SubmitButton,
 } from "./style";
 import { pen, del, accept } from "../../../assets";
-import { ICardNew, ICommentNew } from "../../../interfaces/baseInterfaces";
+import { ICard, IComment } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../hooks";
 import { deleteComment, updateComments } from "../../../redux/ducks/comments";
 
 interface IProps {
-    currentCard: ICardNew;
-    commentInfo: ICommentNew;
+    currentCard: ICard;
+    commentInfo: IComment;
 }
 
 interface IShippingFields {

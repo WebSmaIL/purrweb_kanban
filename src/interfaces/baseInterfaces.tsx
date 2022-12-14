@@ -3,14 +3,12 @@ export interface ICardInfo {
     cardId: number;
 }
 
-
-
-export interface IColumnNew {
+export interface IColumn {
     id: number;
     name: string;
 }
 
-export interface ICardNew {
+export interface ICard {
     id: number;
     columnId: number;
     name: string;
@@ -18,7 +16,7 @@ export interface ICardNew {
     description: string;
 }
 
-export interface ICommentNew {
+export interface IComment {
     id: number;
     cardId: number;
     author: string;

@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ICommentNew } from "../../../interfaces/baseInterfaces";
+import { IComment } from "../../../interfaces/baseInterfaces";
 
-const initialState: ICommentNew[] = [];
+const initialState: IComment[] = [];
 
 const cardsSlice = createSlice({
     name: "comments",
     initialState,
     reducers: {
-        addComment: (state, action: PayloadAction<ICommentNew>) => {
+        addComment: (state, action: PayloadAction<IComment>) => {
             state.push({
                 id: action.payload.id,
                 cardId: action.payload.cardId,
@@ -17,7 +17,7 @@ const cardsSlice = createSlice({
             });
         },
 
-        updateComments: (state, action: PayloadAction<ICommentNew>) => {
+        updateComments: (state, action: PayloadAction<IComment>) => {
             const index = state.findIndex(
                 (card: { id: number }) => card.id === action.payload.id
             );

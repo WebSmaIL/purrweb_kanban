@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ICardNew } from "../../../interfaces/baseInterfaces";
+import { ICard } from "../../../interfaces/baseInterfaces";
 import { InputTitle, CardTitle, UpdateTitleForm, SubmitButton } from "./style";
 import { accept } from "../../../assets";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../../hooks";
 import { updateCards } from "../../../redux/ducks/cards";
 
 interface IProps {
-    currentCard: ICardNew;
+    currentCard: ICard;
 }
 
 interface IShippingField {

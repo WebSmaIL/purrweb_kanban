@@ -1,4 +1,3 @@
-import { ICardInfo } from "./../../../interfaces/baseInterfaces";
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
@@ -9,12 +8,10 @@ export const getAllColumns = createSelector(
     (state) => state.columns.columns
 );
 
-const getColumnById = (state: RootState, props: ICardInfo) =>
-    state.columns.columns.find(
-        (column: { id: number }) => column.id === props.columnId
-    );
 
-export const getColumnByIdSelector = createSelector(
-    [getColumnById],
-    (column) => column
+export const getColumnByIdSelector = (columnId: number) => createSelector(
+    [getAllColumns],
+    (columns) => columns.find(
+        (column: { id: number }) => column.id === columnId
+    )
 );
