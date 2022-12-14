@@ -1,3 +1,3 @@
 export { default as cardsReducer } from "./slice";
-export { addCard, deleteCard, updateCards } from "./slice";
-export { getAllCards, getCardById, getCardsByColumnId } from "./selectors";
+export { cardsActions } from "./slice";
+export * as cardsSelectors from "./selectors";

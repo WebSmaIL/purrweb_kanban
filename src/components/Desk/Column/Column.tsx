@@ -4,7 +4,7 @@ import Card from "./Card/Card";
 import ColumnTitle from "./ColumnTitle/ColumnTitle";
 import AddCard from "./AddCard/AddCard";
 import { useAppSelector } from "../../../hooks";
-import { getCardsByColumnId } from "../../../redux/ducks/cards";
+import { cardsSelectors } from "../../../redux/ducks/cards";
 
 interface IProps {
     id: number;
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const Column = ({ id, name }: IProps): JSX.Element => {
-    const cards = useAppSelector(getCardsByColumnId(id));
+    const cards = useAppSelector(cardsSelectors.getCardsByColumnId(id));
 
     return (
         <ColumnWrapper>
@@ -23,7 +23,6 @@ const Column = ({ id, name }: IProps): JSX.Element => {
                     <Card
                         key={card.id}
                         id={card.id}
-                        columnId={id}
                         name={card.name}
                     />
                 ) : null

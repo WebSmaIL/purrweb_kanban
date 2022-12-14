@@ -2,11 +2,11 @@ import React from "react";
 import { IColumn } from "../../interfaces/baseInterfaces";
 import { Container, DeskWrapper, Title } from "./style";
 import { useAppSelector } from "../../hooks";
-import { getAllColumns } from "../../redux/ducks/columns";
+import { columnsSelectors } from "../../redux/ducks/columns";
 import Column from "./Column/Column";
 
 const Desk = (): JSX.Element => {
-    const columns = useAppSelector(getAllColumns);
+    const columns = useAppSelector(columnsSelectors.getAllColumns);
 
     return (
         <Container>

@@ -10,13 +10,12 @@ import {
     SubmitButton,
 } from "./style";
 import { pen, del, accept } from "../../../assets";
-import { ICard, IComment } from "../../../interfaces/baseInterfaces";
+import { IComment } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../hooks";
-import { deleteComment, updateComments } from "../../../redux/ducks/comments";
+import { commentsActions } from "../../../redux/ducks/comments";
 
 interface IProps {
-    currentCard: ICard;
     commentInfo: IComment;
 }
 
@@ -24,7 +23,7 @@ interface IShippingFields {
     commentText: string;
 }
 
-const Comment = ({ commentInfo, currentCard }: IProps) => {
+const Comment = ({ commentInfo }: IProps) => {
     const dispatch = useAppDispatch();
 
     const [isEdit, setIsEdit] = useState(false);
@@ -33,7 +32,7 @@ const Comment = ({ commentInfo, currentCard }: IProps) => {
 
     const onFormSubmit: SubmitHandler<IShippingFields> = ({ commentText }) => {
         dispatch(
-            updateComments({
+            commentsActions.updateComments({
                 ...commentInfo,
                 content: commentText,
             })
@@ -71,7 +70,7 @@ const Comment = ({ commentInfo, currentCard }: IProps) => {
                         <img src={pen} alt="" />
                     </ChangeButton>
                     <DeleteButton
-                        onClick={() => dispatch(deleteComment(commentInfo.id))}
+                        onClick={() => dispatch(commentsActions.deleteComment(commentInfo.id))}
                     >
                         <img src={del} alt="" />
                     </DeleteButton>

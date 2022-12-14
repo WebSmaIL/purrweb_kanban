@@ -4,12 +4,12 @@ import { ICard, IColumn } from "../../../../interfaces/baseInterfaces";
 import { AddCardButton } from "./style";
 import { plus } from "../../../../assets";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
-import { addCard } from "../../../../redux/ducks/cards";
-import { getName } from "../../../../redux/ducks/user";
+import { cardsActions } from "../../../../redux/ducks/cards";
+import { userSelectors } from "../../../../redux/ducks/user";
 
 const AddCard = ({ id }: IColumn) => {
     const dispatch = useAppDispatch();
-    const userName = useAppSelector(getName);
+    const userName = useAppSelector(userSelectors.getName);
     const [isEdit, setIsEdit] = useState(false);
 
     const onAddCard = (cardTitle: string) => {
@@ -20,7 +20,7 @@ const AddCard = ({ id }: IColumn) => {
             description: "",
             columnId: id,
         };
-        dispatch(addCard(card));
+        dispatch(cardsActions.addCard(card));
         setIsEdit(!isEdit);
     };
 

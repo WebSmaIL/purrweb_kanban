@@ -1,13 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-const selectSelf = (state: RootState) => state;
-
-export const getAllColumns = createSelector(
-    selectSelf,
-    (state) => state.columns.columns
-);
-
+export const getAllColumns = (state: RootState) => state.columns.columns;
 
 export const getColumnByIdSelector = (columnId: number) => createSelector(
     [getAllColumns],

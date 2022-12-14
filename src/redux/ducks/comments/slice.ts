@@ -38,6 +38,6 @@ const cardsSlice = createSlice({
     },
 });
 
-export const { addComment, deleteComment, updateComments } = cardsSlice.actions;
+export const commentsActions = cardsSlice.actions;
 
 export default cardsSlice.reducer;

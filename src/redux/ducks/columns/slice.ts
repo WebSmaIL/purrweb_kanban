@@ -49,8 +49,6 @@ const columnsSlice = createSlice({
     },
 });
 
-export const {
-    updateColumns,
-} = columnsSlice.actions;
+export const columnsActions = columnsSlice.actions;
 
 export default columnsSlice.reducer;

@@ -9,18 +9,17 @@ import {
     ViewButton,
 } from "./style";
 import { useAppSelector } from "../../../../hooks";
-import { getAllComments } from "../../../../redux/ducks/comments";
-import { ViewedContext } from "../../../../App";
+import { commentsSelectors } from "../../../../redux/ducks/comments";
+import { CurrentCardContext } from "../../../../App";
 
 interface IProps {
-    columnId: number;
     id: number;
     name: string;
 }
 
-const Card = ({ id, columnId, name }: IProps) => {
-    const { setViewedCard } = useContext(ViewedContext);
-    const commentsCount = useAppSelector(getAllComments).filter(
+const Card = ({ id, name }: IProps) => {
+    const { setCurrentCard } = useContext(CurrentCardContext);
+    const commentsCount = useAppSelector(commentsSelectors.getAllComments).filter(
         (comment) => comment.cardId === id
     ).length;
 
@@ -30,7 +29,7 @@ const Card = ({ id, columnId, name }: IProps) => {
                 <CardTitle>{name}</CardTitle>
                 <ViewButton
                     onClick={() =>
-                        setViewedCard && setViewedCard({ cardId: id, columnId })
+                        setCurrentCard(id)
                     }
                 >
                     <img src={view} alt="" />

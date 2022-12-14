@@ -1,21 +1,22 @@
 import React from "react";
 import { CommentInput, NewCommentForm, SendButton } from "./style";
 import { send } from "../../../assets";
-import { ICard, IComment } from "../../../interfaces/baseInterfaces";
+import { IComment } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { addComment } from "../../../redux/ducks/comments";
+import { commentsActions } from "../../../redux/ducks/comments";
+import { userSelectors } from "../../../redux/ducks/user";
 
 interface IProps {
-    currentCard: ICard;
+    cardId: number
 }
 
 interface IShippingField {
     commentText: string;
 }
 
-const CreateComment = ({ currentCard }: IProps) => {
-    const userName = useAppSelector((state) => state.userInfo.name);
+const CreateComment = ({ cardId }: IProps) => {
+    const userName = useAppSelector(userSelectors.getName);
     const dispatch = useAppDispatch();
 
     const { register, handleSubmit, reset } = useForm<IShippingField>();
@@ -23,12 +24,12 @@ const CreateComment = ({ currentCard }: IProps) => {
     const onSubmit: SubmitHandler<IShippingField> = ({ commentText }) => {
         const comment: IComment = {
             id: Date.now(),
-            cardId: currentCard.id,
+            cardId,
             author: userName,
             content: commentText,
         };
         dispatch(
-            addComment(comment)
+            commentsActions.addComment(comment)
         );
         reset();
     };

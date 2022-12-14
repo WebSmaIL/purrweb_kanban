@@ -1,20 +1,26 @@
 import React, { useState } from "react";
-import { ICard } from "../../../interfaces/baseInterfaces";
 import { InputTitle, CardTitle, UpdateTitleForm, SubmitButton } from "./style";
 import { accept } from "../../../assets";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../hooks";
-import { updateCards } from "../../../redux/ducks/cards";
+import { cardsActions } from "../../../redux/ducks/cards";
 
 interface IProps {
-    currentCard: ICard;
+    currentCard: {
+        columnName: string | undefined,
+        author: string,
+        columnId: number,
+        description: string,
+        name: string,
+    }
+    cardId: number
 }
 
 interface IShippingField {
     name: string;
 }
 
-const Title = ({ currentCard }: IProps) => {
+const Title = ({ currentCard, cardId }: IProps) => {
     const dispatch = useAppDispatch();
 
     const [isEdit, setIsEdit] = useState(false);
@@ -23,12 +29,12 @@ const Title = ({ currentCard }: IProps) => {
 
     const onSubmit: SubmitHandler<IShippingField> = ({ name }) => {
         dispatch(
-            updateCards({
+            cardsActions.updateCards({
                 author: currentCard.author,
                 name,
                 columnId: currentCard.columnId,
                 description: currentCard.description,
-                id: currentCard.id,
+                id: cardId,
             })
         );
         setIsEdit(false);

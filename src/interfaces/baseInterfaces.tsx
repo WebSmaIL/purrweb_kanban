@@ -1,8 +1,3 @@
-export interface ICardInfo {
-    columnId: number;
-    cardId: number;
-}
-
 export interface IColumn {
     id: number;
     name: string;

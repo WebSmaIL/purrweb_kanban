@@ -1,3 +1,3 @@
 export { default as commentsReducer } from "./slice";
-export { addComment, deleteComment, updateComments } from "./slice";
-export { getAllComments, getCommentsByCardId } from "./selectors";
+export { commentsActions } from "./slice";
+export * as commentsSelectors from "./selectors";

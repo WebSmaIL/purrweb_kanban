@@ -1,4 +1,4 @@
-export { userInfo } from "./user";
+export { userReducer as userInfo } from "./user";
 export { columns } from "./columns";
 export { cardsReducer } from './cards';
 export { commentsReducer } from './comments';

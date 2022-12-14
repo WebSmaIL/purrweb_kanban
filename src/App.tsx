@@ -4,45 +4,39 @@ import SideBar from "./components/Sidebar/Sidebar";
 import { Wrapper } from "./style";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
 import { useAppSelector } from "./hooks";
-import { ICardInfo } from "./interfaces/baseInterfaces";
-import { getName } from "./redux/ducks/user";
+import { userSelectors } from "./redux/ducks/user";
 import CardPopup from "./components/CardPopup/CardPopup";
 
 interface IContextState {
-    setViewedCard:
-        | React.Dispatch<React.SetStateAction<ICardInfo | undefined>>
-        | undefined;
+    setCurrentCard: (value: number) => void
 }
 
 const initialState: IContextState = {
-    setViewedCard: undefined,
+    setCurrentCard: ()=>{},
 };
 
-export const ViewedContext = React.createContext<IContextState>(initialState);
+export const CurrentCardContext = React.createContext<IContextState>(initialState);
 
 const App = (): JSX.Element => {
-    const userName = useAppSelector(getName);
+    const userName = useAppSelector(userSelectors.getName);
 
-    const [viewedCard, setViewedCard] = useState<ICardInfo | undefined>(
+    const [currentCard, setCurrentCard] = useState<number | undefined>(
         undefined
     );
 
     return (
-        <ViewedContext.Provider value={{ setViewedCard }}>
+        <CurrentCardContext.Provider value={{ setCurrentCard }}>
             <Wrapper>
                 <SideBar Name={userName} />
                 <Desk />
                 {!userName && <LoginPopup />}
-                {viewedCard && (
+                {currentCard && (
                     <CardPopup
-                        cardInfo={{
-                            columnId: viewedCard.columnId,
-                            cardId: viewedCard.cardId,
-                        }}
+                            cardId={currentCard}
                     />
                 )}
             </Wrapper>
-        </ViewedContext.Provider>
+        </CurrentCardContext.Provider>
     );
 };
 

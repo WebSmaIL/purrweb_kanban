@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppDispatch } from "../../hooks";
-import { setUserName } from "../../redux/ducks/user/reducers";
+import { userActions } from "../../redux/ducks/user";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
     LoginWrapper,
@@ -21,7 +21,7 @@ const LoginPopup = () => {
     const { register, handleSubmit } = useForm<IUserName>();
 
     const onSubmit: SubmitHandler<IUserName> = ({ userName }) =>
-        dispatch(setUserName(userName));
+        dispatch(userActions.setUserName(userName));
 
     return (
         <LoginWrapper>
