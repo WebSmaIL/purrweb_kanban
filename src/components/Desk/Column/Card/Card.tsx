@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { IComment } from "../../../../interfaces/baseInterfaces";
 import view from "../../../../assets/view.svg";
 import { comment } from "../../../../assets";
 import {
@@ -9,29 +8,36 @@ import {
     TitleContainer,
     ViewButton,
 } from "./style";
-import { StateContext } from "../../../../api/ContextAPI";
+import { useAppSelector } from "../../../../hooks";
+import { commentsSelectors } from "../../../../redux/ducks/comments";
+import { CurrentCardContext } from "../../../../App";
 
 interface IProps {
-    columnId: number;
     id: number;
     name: string;
-    comments: IComment[]
 }
 
-const Card = ({ id, columnId, name, comments }: IProps) => {
-    const context = useContext(StateContext);
+const Card = ({ id, name }: IProps) => {
+    const { setCurrentCard } = useContext(CurrentCardContext);
+    const commentsCount = useAppSelector(commentsSelectors.getAllComments).filter(
+        (comment) => comment.cardId === id
+    ).length;
 
     return (
         <CardContainer>
             <TitleContainer>
                 <CardTitle>{name}</CardTitle>
-                <ViewButton onClick={()=> context.setViewedCard({cardId: id, columnId})}>
+                <ViewButton
+                    onClick={() =>
+                        setCurrentCard(id)
+                    }
+                >
                     <img src={view} alt="" />
                 </ViewButton>
             </TitleContainer>
             <CommentContainer>
                 <img src={comment} alt="" />
-                <span>{comments.length}</span>
+                <span>{commentsCount}</span>
             </CommentContainer>
         </CardContainer>
     );

@@ -7,6 +7,7 @@ interface IProps {
 }
 
 const Sidebar = ({ Name }: IProps): JSX.Element => {
+    console.log('rerender sidebar');
     return (
         <SidebarContainer>
             <span>KANBAN</span>

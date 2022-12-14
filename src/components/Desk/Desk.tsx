@@ -1,13 +1,13 @@
 import React from "react";
-import Column from "./Column/Column";
 import { IColumn } from "../../interfaces/baseInterfaces";
 import { Container, DeskWrapper, Title } from "./style";
+import { useAppSelector } from "../../hooks";
+import { columnsSelectors } from "../../redux/ducks/columns";
+import Column from "./Column/Column";
 
-interface IProps {
-    columns: IColumn[];
-}
+const Desk = (): JSX.Element => {
+    const columns = useAppSelector(columnsSelectors.getAllColumns);
 
-const Desk = ({ columns }: IProps): JSX.Element => {
     return (
         <Container>
             <Title>Your Desk</Title>
@@ -18,7 +18,6 @@ const Desk = ({ columns }: IProps): JSX.Element => {
                             key={element.id}
                             id={element.id}
                             name={element.name}
-                            cards={element.cards}
                         />
                     );
                 })}

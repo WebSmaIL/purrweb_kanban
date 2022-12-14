@@ -14,56 +14,38 @@ import {
 } from "./style";
 import { pen, close } from "../../assets/index";
 import Comment from "./Comment/Comment";
-import { ICardInfo } from "../../interfaces/baseInterfaces";
 import EditDescription from "./EditDescription/EditDescription";
 import CreateComment from "./CreateComment/CreateComment";
-import { StateContext } from "../../api/ContextAPI";
 import Title from "./Title/Title";
-import { cloneDeep } from "lodash";
-import { replaceColumn } from "../../helpers/helpers";
+import { CurrentCardContext } from "../../App";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { commentsSelectors } from "../../redux/ducks/comments";
+import { cardsSelectors, cardsActions } from "../../redux/ducks/cards";
 
-const CardPopup = ({ cardId, columnId }: ICardInfo) => {
+interface IProps {
+    cardId: number;
+}
+
+const CardPopup = ({ cardId }: IProps) => {
+    const { setCurrentCard } = useContext(CurrentCardContext);
     const [isEditDescription, setIsEditDescription] = useState(false);
-    const context = useContext(StateContext);
 
-    const currentColumn = context.columns.find(
-        (column: { id: number }) => column.id === columnId
-    );
+    const comments = useAppSelector(commentsSelectors.getCommentsByCardId(cardId));
+    const currentCard = useAppSelector(cardsSelectors.getCardById(cardId));
 
-    const currentCard = currentColumn?.cards.find(
-        (card: { id: number }) => card.id === cardId
-    );
-
-    const deleteCard = () => {
-        const columnCopy = cloneDeep(currentColumn);
-        if (columnCopy) {
-            columnCopy.cards = columnCopy.cards.filter(
-                (card) => card.id !== cardId
-            );
-            const updatedColumns = replaceColumn(
-                context.columns,
-                columnId,
-                columnCopy
-            );
-            context.setViewedCard(undefined);
-            context.setColumns(updatedColumns);
-        }
-    };
+    const dispatch = useAppDispatch();
 
     return (
         <BackdropWrapper>
-            {currentColumn && currentCard && (
+            {currentCard && (
                 <CardContainer>
                     <CloseButton
-                        onClick={() => context.setViewedCard(undefined)}
+                        onClick={() => setCurrentCard(0)}
                     >
                         <img src={close} alt="" />
                     </CloseButton>
-                    <Title
-                        currentCard={currentCard}
-                        cardInfo={{ cardId, columnId }}
-                    />
-                    <Subtitle>Column - {currentColumn.name}</Subtitle>
+                    <Title cardId={cardId} currentCard={currentCard} />
+                    <Subtitle>Column - {currentCard.columnName}</Subtitle>
                     <Author>
                         Author - <i>{currentCard.author}</i>
                     </Author>
@@ -73,8 +55,8 @@ const CardPopup = ({ cardId, columnId }: ICardInfo) => {
                     <DescriptionContainer>
                         {isEditDescription ? (
                             <EditDescription
+                                cardId={cardId}
                                 currentCard={currentCard}
-                                cardInfo={{ cardId, columnId }}
                                 setIsEditDescription={setIsEditDescription}
                             />
                         ) : (
@@ -97,23 +79,21 @@ const CardPopup = ({ cardId, columnId }: ICardInfo) => {
                     </Subtitle>
                     <CommentsWrapper>
                         <CommentsContainer>
-                            {currentCard.comments?.map((comment) => (
+                            {comments?.map((comment) => (
                                 <Comment
-                                    currentCard={currentCard}
-                                    cardInfo={{ cardId, columnId }}
+                                    commentInfo={comment}
                                     key={comment.id}
-                                    id={comment.id}
-                                    author={comment.author}
-                                    content={comment.content}
                                 />
                             ))}
                         </CommentsContainer>
-                        <CreateComment
-                            currentCard={currentCard}
-                            cardInfo={{ cardId, columnId }}
-                        />
+                        <CreateComment cardId={cardId} />
                     </CommentsWrapper>
-                    <DeleteButton onClick={deleteCard}>
+                    <DeleteButton
+                        onClick={() => {
+                            setCurrentCard(0);
+                            dispatch(cardsActions.deleteCard(cardId));
+                        }}
+                    >
                         Delete card
                     </DeleteButton>
                 </CardContainer>

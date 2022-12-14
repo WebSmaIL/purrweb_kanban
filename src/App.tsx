@@ -1,33 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Desk from "./components/Desk/Desk";
 import SideBar from "./components/Sidebar/Sidebar";
 import { Wrapper } from "./style";
-import { LocalStorageAPI } from "./api/LocalStorageAPI";
-import { StateContext, ContextState } from "./api/ContextAPI";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
+import { useAppSelector } from "./hooks";
+import { userSelectors } from "./redux/ducks/user";
 import CardPopup from "./components/CardPopup/CardPopup";
-import { ICardInfo } from "./interfaces/baseInterfaces";
+
+interface IContextState {
+    setCurrentCard: (value: number) => void;
+}
+
+const initialState: IContextState = {
+    setCurrentCard: () => {},
+};
+
+export const CurrentCardContext =
+    React.createContext<IContextState>(initialState);
 
 const App = (): JSX.Element => {
-    const [columns, setColumns] = useState(ContextState);
-    useEffect(() => LocalStorageAPI.updateColumns(columns), [columns]);
+    const userName = useAppSelector(userSelectors.getName);
 
-    const [name, setName] = useState(LocalStorageAPI.getName());
-    useEffect(() => LocalStorageAPI.updateName(name), [name]);
-
-    const [viewedCard, setViewedCard] = useState<ICardInfo | undefined>(undefined);
+    const [currentCard, setCurrentCard] = useState(0);
 
     return (
-        <StateContext.Provider
-            value={{ columns, setColumns, setViewedCard, userName: name }}
-        >
+        <CurrentCardContext.Provider value={{ setCurrentCard }}>
             <Wrapper>
-                <SideBar Name={name} />
-                <Desk columns={columns} />
-                {!name && <LoginPopup setName={setName} />}
-                {viewedCard && <CardPopup columnId={viewedCard.columnId} cardId={viewedCard.cardId} />}
+                <SideBar Name={userName} />
+                <Desk />
+                {!userName && <LoginPopup />}
+                {currentCard && <CardPopup cardId={currentCard} />}
             </Wrapper>
-        </StateContext.Provider>
+        </CurrentCardContext.Provider>
     );
 };
 

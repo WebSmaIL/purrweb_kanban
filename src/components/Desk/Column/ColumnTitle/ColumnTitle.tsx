@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { StateContext } from "../../../../api/ContextAPI";
 import { accept, pen } from "../../../../assets";
 import {
     Container,
@@ -10,24 +9,29 @@ import {
     AcceptButton,
     TitleChangeForm,
 } from "./style";
-import { replaceColumn } from "../../../../helpers/helpers";
-import { IColumn } from "../../../../interfaces/baseInterfaces";
+import { columnsActions } from "../../../../redux/ducks/columns";  
+import { ICard } from "../../../../interfaces/baseInterfaces";
+import { useAppDispatch } from "../../../../hooks";
 
 interface IShippingField {
     columnTitle: string;
 }
 
-const ColumnTitle = ({ id, name, cards }: IColumn) => {
-    const context = useContext(StateContext);
+interface IProps {
+    id: number,
+    name: string,
+    cards: ICard[]
+}
+
+const ColumnTitle = ({ id, name, cards }: IProps) => {
+    const dispatch = useAppDispatch();
 
     const [isRenameColumn, setIsRenameColumn] = useState(false);
 
     const { register, handleSubmit } = useForm<IShippingField>();
 
     const onSubmit: SubmitHandler<IShippingField> = ({ columnTitle }) => {
-        const column = { id, name: columnTitle, cards };
-        const updatedColumns = replaceColumn(context.columns, id, column);
-        context.setColumns(updatedColumns);
+        dispatch(columnsActions.updateColumns({id, name: columnTitle }));
         setIsRenameColumn(!isRenameColumn);
     };
 

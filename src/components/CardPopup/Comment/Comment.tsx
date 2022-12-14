@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
     CommentContainer,
     Author,
@@ -10,67 +10,47 @@ import {
     SubmitButton,
 } from "./style";
 import { pen, del, accept } from "../../../assets";
-import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
-import { StateContext } from "../../../api/ContextAPI";
-import { replaceCard } from "../../../helpers/helpers";
-import { cloneDeep } from "lodash";
+import { IComment } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch } from "../../../hooks";
+import { commentsActions } from "../../../redux/ducks/comments";
 
 interface IProps {
-    cardInfo: ICardInfo;
-    currentCard: ICard;
-    id: number;
-    author: string;
-    content: string;
+    commentInfo: IComment;
 }
 
 interface IShippingFields {
     commentText: string;
 }
 
-const Comment = ({ id, author, content, cardInfo, currentCard }: IProps) => {
-    const context = useContext(StateContext);
+const Comment = ({ commentInfo }: IProps) => {
+    const dispatch = useAppDispatch();
 
     const [isEdit, setIsEdit] = useState(false);
 
     const { register, handleSubmit } = useForm<IShippingFields>();
 
-    const onFormSubmit: SubmitHandler<IShippingFields> = ({
-        commentText,
-    }) => {
-        const cardCopy = cloneDeep(currentCard);
-        const updatedComments = cardCopy.comments.map((comment) =>
-            comment.id === id
-                ? { id, author: comment.author, content: commentText }
-                : comment
+    const onFormSubmit: SubmitHandler<IShippingFields> = ({ commentText }) => {
+        dispatch(
+            commentsActions.updateComments({
+                ...commentInfo,
+                content: commentText,
+            })
         );
-        cardCopy.comments = updatedComments;
-
-        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
-        context.setColumns(updatedColumns);
         setIsEdit(!isEdit);
-    };
-
-    const deleteComment = () => {
-        const cardCopy = cloneDeep(currentCard);
-        cardCopy.comments = cardCopy.comments.filter(
-            (comment) => comment.id !== id
-        );
-
-        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
-        context.setColumns(updatedColumns);
     };
 
     return (
         <CommentContainer>
             <Author>
-                <i>{author}</i>:
+                <i>{commentInfo.author}</i>:
             </Author>
             {isEdit ? (
                 <EditCommentForm onSubmit={handleSubmit(onFormSubmit)}>
                     <InputComment
                         {...register("commentText", {
                             required: true,
+                            value: commentInfo.content,
                         })}
                     />
                     <SubmitButton>
@@ -78,7 +58,7 @@ const Comment = ({ id, author, content, cardInfo, currentCard }: IProps) => {
                     </SubmitButton>
                 </EditCommentForm>
             ) : (
-                <Content>{content}</Content>
+                <Content>{commentInfo.content}</Content>
             )}
             {!isEdit && (
                 <>
@@ -89,7 +69,9 @@ const Comment = ({ id, author, content, cardInfo, currentCard }: IProps) => {
                     >
                         <img src={pen} alt="" />
                     </ChangeButton>
-                    <DeleteButton onClick={deleteComment}>
+                    <DeleteButton
+                        onClick={() => dispatch(commentsActions.deleteComment(commentInfo.id))}
+                    >
                         <img src={del} alt="" />
                     </DeleteButton>
                 </>

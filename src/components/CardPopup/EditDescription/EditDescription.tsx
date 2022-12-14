@@ -1,15 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import { DescriptionForm, DescriptionInput, SubmitDescription } from "./style";
 import { send } from "../../../assets";
-import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
-import { StateContext } from "../../../api/ContextAPI";
-import { replaceCard } from "../../../helpers/helpers";
-import { cloneDeep } from "lodash";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch } from "../../../hooks";
+import { cardsActions } from "../../../redux/ducks/cards";
 
 interface IProps {
-    currentCard: ICard
-    cardInfo: ICardInfo;
+    currentCard: {
+        columnName: string | undefined;
+        author: string;
+        columnId: number;
+        description: string;
+        name: string;
+    };
+    cardId: number;
     setIsEditDescription: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -18,20 +22,24 @@ interface IShippingFields {
 }
 
 const EditDescription = ({
+    cardId,
     currentCard,
-    cardInfo,
     setIsEditDescription,
 }: IProps) => {
-    const context = useContext(StateContext);
+    const dispatch = useAppDispatch();
 
     const { register, handleSubmit } = useForm<IShippingFields>();
 
     const onSubmit: SubmitHandler<IShippingFields> = ({ description }) => {
-        const cardCopy = cloneDeep(currentCard);
-        cardCopy.description = description;
-        
-        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy)
-        context.setColumns(updatedColumns);
+        dispatch(
+            cardsActions.updateCards({
+                author: currentCard.author,
+                columnId: currentCard.columnId,
+                description: description,
+                name: currentCard.name,
+                id: cardId,
+            })
+        );
         setIsEditDescription(false);
     };
 
@@ -39,7 +47,7 @@ const EditDescription = ({
         <DescriptionForm onSubmit={handleSubmit(onSubmit)}>
             <DescriptionInput
                 {...register("description", {
-                    value: currentCard.description
+                    value: currentCard.description,
                 })}
                 placeholder="Enter a new description"
             />

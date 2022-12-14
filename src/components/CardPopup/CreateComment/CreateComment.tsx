@@ -1,37 +1,36 @@
-import React, { useContext } from "react";
+import React from "react";
 import { CommentInput, NewCommentForm, SendButton } from "./style";
 import { send } from "../../../assets";
-import { ICard, ICardInfo } from "../../../interfaces/baseInterfaces";
-import { StateContext } from "../../../api/ContextAPI";
-import { replaceCard } from "../../../helpers/helpers";
-import { cloneDeep } from "lodash";
+import { IComment } from "../../../interfaces/baseInterfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { commentsActions } from "../../../redux/ducks/comments";
+import { userSelectors } from "../../../redux/ducks/user";
 
 interface IProps {
-    cardInfo: ICardInfo;
-    currentCard: ICard;
+    cardId: number
 }
 
 interface IShippingField {
     commentText: string;
 }
 
-const CreateComment = ({ cardInfo, currentCard }: IProps) => {
-    const context = useContext(StateContext);
+const CreateComment = ({ cardId }: IProps) => {
+    const userName = useAppSelector(userSelectors.getName);
+    const dispatch = useAppDispatch();
 
     const { register, handleSubmit, reset } = useForm<IShippingField>();
-    
+
     const onSubmit: SubmitHandler<IShippingField> = ({ commentText }) => {
-        const comment = {
+        const comment: IComment = {
             id: Date.now(),
-            author: context.userName,
+            cardId,
+            author: userName,
             content: commentText,
         };
-        const cardCopy = cloneDeep(currentCard);
-        cardCopy.comments.push(comment);
-
-        const updatedColumns = replaceCard(context.columns, cardInfo, cardCopy);
-        context.setColumns(updatedColumns);
+        dispatch(
+            commentsActions.addComment(comment)
+        );
         reset();
     };
 
