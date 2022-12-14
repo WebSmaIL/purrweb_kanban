@@ -8,21 +8,20 @@ import { userSelectors } from "./redux/ducks/user";
 import CardPopup from "./components/CardPopup/CardPopup";
 
 interface IContextState {
-    setCurrentCard: (value: number) => void
+    setCurrentCard: (value: number) => void;
 }
 
 const initialState: IContextState = {
-    setCurrentCard: ()=>{},
+    setCurrentCard: () => {},
 };
 
-export const CurrentCardContext = React.createContext<IContextState>(initialState);
+export const CurrentCardContext =
+    React.createContext<IContextState>(initialState);
 
 const App = (): JSX.Element => {
     const userName = useAppSelector(userSelectors.getName);
 
-    const [currentCard, setCurrentCard] = useState<number | undefined>(
-        undefined
-    );
+    const [currentCard, setCurrentCard] = useState(0);
 
     return (
         <CurrentCardContext.Provider value={{ setCurrentCard }}>
@@ -30,11 +29,7 @@ const App = (): JSX.Element => {
                 <SideBar Name={userName} />
                 <Desk />
                 {!userName && <LoginPopup />}
-                {currentCard && (
-                    <CardPopup
-                            cardId={currentCard}
-                    />
-                )}
+                {currentCard && <CardPopup cardId={currentCard} />}
             </Wrapper>
         </CurrentCardContext.Provider>
     );
